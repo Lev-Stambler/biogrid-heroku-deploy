@@ -1,6 +1,6 @@
 {
   "name": "biogrid",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "engines": {
     "node": "~13"
   },
@@ -8,7 +8,7 @@
   "scripts": {
     "nx": "nx",
     "fullstack:dev": "PORT=3333 && npm run build:tsoa && npm run build-api-client && nx serve-with-api biogrid-mvp",
-    "deploy:heroku": "npm run build:prod && npm run copy:heroku && (cd ../../biogrid-heroku-deploy/ && git commit -am \"auto commit\" && git push)",
+    "deploy:heroku": "npm run build:prod && npm run copy:heroku && (cd ../../biogrid-heroku-deploy/ && git add . && git commit -m \"auto commit\" && git push)",
     "build:prod": "npm run build:tsoa && npm run build-api-client && nx build api --prod && nx build biogrid-mvp --prod && npm run copy-frontend-to-api",
     "copy:heroku": "cp -r dist/apps/api/* ../../biogrid-heroku-deploy/ && cp package.json ../../biogrid-heroku-deploy/ && cp package-lock.json ../../biogrid-heroku-deploy/",
     "copy-frontend-to-api": "(mkdir dist/apps/api/build/public || true) && cp -r dist/apps/biogrid-mvp/* dist/apps/api/build/public",
