@@ -303,6 +303,9 @@ class Server {
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
     async listen(port = this.port) {
+        if (!port) {
+            port = parseInt(process.env.PORT || '3000');
+        }
         process.on('uncaughtException', this.criticalErrorHandler);
         process.on('unhandledRejection', this.criticalErrorHandler);
         const listen = this.app.listen(this.port);
@@ -363,7 +366,8 @@ module.exports = require("morgan");
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = {
     production: true,
-    port: 8081
+    // Leave port null so that the Heroku env variable can override it
+    port: null
 };
 
 
