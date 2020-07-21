@@ -100,7 +100,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const environment_1 = __webpack_require__(12);
 exports.default = {
     environment: environment_1.environment.production ? 'production' : 'development',
-    port: environment_1.environment.port || 3333,
+    port: environment_1.environment.port || parseInt(process.env.PORT || '3000'),
     errorTypes: {
         db: {
             statusCode: 500,
@@ -303,9 +303,6 @@ class Server {
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
     async listen(port = this.port) {
-        if (!port) {
-            port = parseInt(process.env.PORT || '3000');
-        }
         process.on('uncaughtException', this.criticalErrorHandler);
         process.on('unhandledRejection', this.criticalErrorHandler);
         const listen = this.app.listen(this.port);
