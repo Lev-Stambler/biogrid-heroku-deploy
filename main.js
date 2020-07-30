@@ -109,46 +109,6 @@ tslib_1.__exportStar(__webpack_require__(46), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(22), exports);
-tslib_1.__exportStar(__webpack_require__(47), exports);
-tslib_1.__exportStar(__webpack_require__(49), exports);
-tslib_1.__exportStar(__webpack_require__(54), exports);
-tslib_1.__exportStar(__webpack_require__(56), exports);
-tslib_1.__exportStar(__webpack_require__(58), exports);
-tslib_1.__exportStar(__webpack_require__(60), exports);
-tslib_1.__exportStar(__webpack_require__(62), exports);
-tslib_1.__exportStar(__webpack_require__(1), exports);
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(24), exports);
-tslib_1.__exportStar(__webpack_require__(26), exports);
-tslib_1.__exportStar(__webpack_require__(28), exports);
-tslib_1.__exportStar(__webpack_require__(30), exports);
-tslib_1.__exportStar(__webpack_require__(32), exports);
-tslib_1.__exportStar(__webpack_require__(34), exports);
-tslib_1.__exportStar(__webpack_require__(36), exports);
-tslib_1.__exportStar(__webpack_require__(37), exports);
-tslib_1.__exportStar(__webpack_require__(39), exports);
-tslib_1.__exportStar(__webpack_require__(41), exports);
-tslib_1.__exportStar(__webpack_require__(43), exports);
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 const environment_1 = __webpack_require__(16);
 exports.default = {
     environment: environment_1.environment.production ? 'production' : 'development',
@@ -181,6 +141,9 @@ exports.default = {
             message: 'entity error',
         },
     },
+    simulation: {
+        NUMBER_OF_SIM_CYCLES: 10,
+    },
     get errorMap() {
         return {
             ValidateError: this.errorTypes.validation,
@@ -192,6 +155,46 @@ exports.default = {
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(22), exports);
+tslib_1.__exportStar(__webpack_require__(47), exports);
+tslib_1.__exportStar(__webpack_require__(49), exports);
+tslib_1.__exportStar(__webpack_require__(56), exports);
+tslib_1.__exportStar(__webpack_require__(58), exports);
+tslib_1.__exportStar(__webpack_require__(60), exports);
+tslib_1.__exportStar(__webpack_require__(62), exports);
+tslib_1.__exportStar(__webpack_require__(64), exports);
+tslib_1.__exportStar(__webpack_require__(1), exports);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(24), exports);
+tslib_1.__exportStar(__webpack_require__(26), exports);
+tslib_1.__exportStar(__webpack_require__(28), exports);
+tslib_1.__exportStar(__webpack_require__(30), exports);
+tslib_1.__exportStar(__webpack_require__(32), exports);
+tslib_1.__exportStar(__webpack_require__(34), exports);
+tslib_1.__exportStar(__webpack_require__(36), exports);
+tslib_1.__exportStar(__webpack_require__(37), exports);
+tslib_1.__exportStar(__webpack_require__(39), exports);
+tslib_1.__exportStar(__webpack_require__(41), exports);
+tslib_1.__exportStar(__webpack_require__(43), exports);
+
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -199,7 +202,7 @@ exports.default = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-const constants_1 = tslib_1.__importDefault(__webpack_require__(4));
+const constants_1 = tslib_1.__importDefault(__webpack_require__(2));
 const logger = tslib_1.__importStar(__webpack_require__(18));
 const date = new Date();
 const fileName = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}.log`;
@@ -319,11 +322,11 @@ const express_1 = tslib_1.__importDefault(__webpack_require__(12));
 const swaggerUi = tslib_1.__importStar(__webpack_require__(13));
 const bodyParser = tslib_1.__importStar(__webpack_require__(14));
 const morgan_1 = tslib_1.__importDefault(__webpack_require__(15));
-const constants_1 = tslib_1.__importDefault(__webpack_require__(4));
+const constants_1 = tslib_1.__importDefault(__webpack_require__(2));
 const ErrorHandler_1 = __webpack_require__(17);
 const routes_1 = __webpack_require__(19);
 const Logger_1 = __webpack_require__(5);
-__webpack_require__(64);
+__webpack_require__(66);
 class Server {
     constructor() {
         this.app = express_1.default();
@@ -337,7 +340,7 @@ class Server {
         this.serveStaticFiles();
         // Disable linter as require statement is necessary for swagger files
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const swaggerDocument = __webpack_require__(65);
+        const swaggerDocument = __webpack_require__(67);
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
     async listen(port = this.port) {
@@ -587,7 +590,9 @@ tslib_1.__exportStar(__webpack_require__(21), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const biogrid_simulator_1 = __webpack_require__(2);
+const tslib_1 = __webpack_require__(0);
+const biogrid_simulator_1 = __webpack_require__(3);
+const constants_1 = tslib_1.__importDefault(__webpack_require__(2));
 function createRandomBuildingPosition(townWidth, townHeight) {
     const x = Math.floor(Math.random() * townWidth);
     const y = Math.floor(Math.random() * townHeight);
@@ -602,7 +607,12 @@ async function simulateNewBiogrid(body) {
     const buildings = [];
     for (let i = 0; i < body.numBuildings; i++) {
         const randomPos = createRandomBuildingPosition(body.townWidth, body.townHeight);
-        buildings.push(new biogrid_simulator_1.Building(10, randomPos.x, randomPos.y));
+        buildings.push(new biogrid_simulator_1.Building({
+            energy: biogrid_simulator_1.BUILDING.DEFAULT_INITIAL_ENERGY,
+            x: randomPos.x,
+            y: randomPos.y,
+            gridItemName: `${biogrid_simulator_1.GRID_ITEM_NAMES.ENERGY_USER}-${i}`
+        }));
     }
     const town = new biogrid_simulator_1.RuralArea(buildings, body.townWidth, body.townHeight);
     const biogrid = new biogrid_simulator_1.Biogrid(town, {
@@ -613,9 +623,15 @@ async function simulateNewBiogrid(body) {
     const biobrain = biogrid_simulator_1.BioBrain.Instance;
     const initState = biogrid.getSystemState();
     const statesJson = [biogrid.getJsonGraphDetails()];
-    const action = biobrain.computeAction(initState);
-    biogrid.takeAction(action);
-    statesJson.push(biogrid.getJsonGraphDetails());
+    const currentDate = body.startDate;
+    for (let i = 0; i < constants_1.default.simulation.NUMBER_OF_SIM_CYCLES; i++) {
+        // Start at midnight, increment hours until NUMBER_OF_SIM_CYCLES reached
+        currentDate.setHours(i);
+        biogrid.drainEnergyUsers(currentDate);
+        const action = await biobrain.computeAction(initState, currentDate);
+        biogrid.takeAction(action);
+        statesJson.push(biogrid.getJsonGraphDetails());
+    }
     return {
         energyWastedFromSource: 10,
         energyWastedInTransportation: 12,
@@ -645,7 +661,7 @@ tslib_1.__exportStar(__webpack_require__(23), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const grid_simulator_1 = __webpack_require__(3);
+const grid_simulator_1 = __webpack_require__(4);
 const config_1 = __webpack_require__(1);
 class BioBattery {
     /**
@@ -655,16 +671,19 @@ class BioBattery {
      * @param x Distance from the left edge of the town
      * @param y Distance from the top edge of the town
      */
-    constructor(x, y, gridItemName, gridItemResistance, energyInJoules = config_1.SMALL_BATTERY.DEFAULT_START_ENERGY, maxCapacity = config_1.SMALL_BATTERY.MAX_CAPACITY) {
-        this.relativePosition = { x, y };
-        if (!this.validateInputs(energyInJoules, maxCapacity)) {
+    constructor(batteryParams) {
+        this.maxCapacity = config_1.SMALL_BATTERY.MAX_CAPACITY;
+        this.relativePosition = { x: batteryParams.x, y: batteryParams.y };
+        if (!this.validateInputs(batteryParams.energyInJoules, batteryParams.maxCapacity)) {
             // TODO return a tuple of from validate to with the boolean and unpassed validations
-            throw new Error(`Cannot create a battery with values: (${energyInJoules}, ${maxCapacity})`);
+            throw new Error(`Cannot create a battery with values: (${batteryParams.energyInJoules}, ${batteryParams.maxCapacity})`);
         }
-        this.energyInJoules = energyInJoules;
-        this.maxCapacity = maxCapacity;
-        this.gridItemName = gridItemName;
-        this.gridItemResistance = gridItemResistance;
+        this.energyInJoules = batteryParams.energyInJoules;
+        if (batteryParams.maxCapacity) {
+            this.maxCapacity = batteryParams.maxCapacity;
+        }
+        this.gridItemName = batteryParams.gridItemName;
+        this.gridItemResistance = batteryParams.gridItemResistance;
     }
     getRelativePosition() {
         return this.relativePosition;
@@ -971,7 +990,9 @@ exports.SOLAR_PANEL = {
     AREA: 10,
     DEFAULT_INITIAL_ENERGY: 250,
     KILOLUX_TO_KILOWATT_PER_SQUARE_METER: 0.0079,
-    MIN_CAPACITY: 240
+    MIN_CAPACITY: 240,
+    CLEAR_SKY_POWER_WATTS: 990,
+    CLOUD_COVERAGE_SCALING_CONSTANT: 0.75,
 };
 var GRID_ITEM_NAMES;
 (function (GRID_ITEM_NAMES) {
@@ -981,7 +1002,6 @@ var GRID_ITEM_NAMES;
     GRID_ITEM_NAMES["SMALL_BATTERY"] = "small_battery";
     GRID_ITEM_NAMES["SOLAR_PANEL"] = "solar_panel";
 })(GRID_ITEM_NAMES = exports.GRID_ITEM_NAMES || (exports.GRID_ITEM_NAMES = {}));
-;
 /**
  * Resistance of the differents components used in the grid
  * For transportation of power, wire 16 of awg is used for transmission lines
@@ -1009,7 +1029,7 @@ exports.RESISTANCE = {
     // TODO insert the correct resistance for the small batteries used
     SMALL_BATTERY: 0.4,
     // TODO insert the correct resistance for the solar panels used
-    SOLAR_PANEL: 3.617
+    SOLAR_PANEL: 3.617,
 };
 /**
  * A building uses approximately 1000 KWh (kilo watts hour) per month,
@@ -1018,8 +1038,41 @@ exports.RESISTANCE = {
  */
 exports.BUILDING = {
     DEFAULT_INITIAL_ENERGY: 1.3,
-    MAX_CAPACITY: 1.3,
+    MAX_CAPACITY: 10,
     MIN_CAPACITY: 0,
+    /**
+     * Source is from Research Gate
+     * @see https://www.researchgate.net/publication/326358349/figure/fig2/AS:647731865477122@1531442719619/Average-daily-energy-consumption-during-the-weekdays-and-the-variation-throughout-the.png
+     */
+    ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY: {
+        '0': 8,
+        '1': 6,
+        '2': 4.25,
+        '3': 4,
+        '4': 4.25,
+        '5': 4,
+        '6': 5,
+        '7': 6.2,
+        '8': 5,
+        '9': 5,
+        '10': 5,
+        '11': 4.75,
+        '12': 4.75,
+        '13': 4.5,
+        '14': 4.75,
+        '15': 5,
+        '16': 5.5,
+        '17': 6,
+        '18': 7,
+        '19': 10,
+        '20': 9.5,
+        '21': 9,
+        '22': 11,
+        '23': 11,
+    }
+};
+exports.TIME = {
+    DISCRETE_UNIT_HOURS: 1,
 };
 
 
@@ -1050,7 +1103,8 @@ exports.calculateResistance = calculateResistance;
  * This function calculates the current passing through the circuit at any given time using the physics
  * equation of calculating current, I = V / R where I is the current, V is voltage, R is resistance
  * @param voltage is the voltage of the circuit at that particular point
- * @param resistance is the resistance of the wires and any connected materials in the circuit
+ * @param loadResistance is the resistance for the grid items in the shortest path
+ * @param wireResistance is the resistance of the wires
  * @returns the current flowing in that particular circuit
  */
 function calculateCurrent(voltage, loadResistance, wireResistance) {
@@ -1084,6 +1138,38 @@ function calculatePower(voltage, resistance) {
     return (Math.pow(voltage, 2) / resistance);
 }
 exports.calculatePower = calculatePower;
+/**
+ * This function calculates the power in the circuit for usage in the efficiency
+ * It calculates this based on the two physics equations
+ *    1. P = V * I
+ *    2. V = I * R
+ * where P is power, V is voltage, I is current and R is resistance
+ * Since current is constant in circuits
+ * Th final equation implemented is P = I^2 * R
+ * @param current is the current in the circuit at that particular time
+ * @param resistance is the resistance of the wires
+ * @return the power transport over the given @param resistance
+ */
+function calculatePowerWithCurrent(current, resistance) {
+    return (Math.pow(current, 2) * resistance);
+}
+exports.calculatePowerWithCurrent = calculatePowerWithCurrent;
+/**
+ * This function is used to calculate the current in the circuit using the given @param power
+ * It calculates the current based on these physics equations for electricity
+ *    1. P = V * I
+ *    2. V = I * R
+ * From these two equations, we can deduce that, 3. P = I^2 * R
+ * where P is power, V is voltage, I is current and R is resistance
+ * The final equation implemented is the reverse of equation 3, with I = sqrt(P * R)
+ * @param power is the power coming in the circuit
+ * @param resistance is the resistance of the circuit
+ * @returns the current that is going through the circuit over the given @param resistance
+ */
+function calculateCurrentFromPower(power, resistance) {
+    return Math.sqrt(power / resistance);
+}
+exports.calculateCurrentFromPower = calculateCurrentFromPower;
 /**
  * This function is used to calculate the voltage in the circuit using the given @param power
  * @param power is the power coming in the circuit
@@ -1127,9 +1213,11 @@ tslib_1.__exportStar(__webpack_require__(48), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const biogrid_simulator_1 = __webpack_require__(2);
-const config_1 = __webpack_require__(1);
+const tslib_1 = __webpack_require__(0);
+const biogrid_simulator_1 = __webpack_require__(3);
+const config = tslib_1.__importStar(__webpack_require__(1));
 const graphlib_1 = __webpack_require__(8);
+const config_1 = __webpack_require__(1);
 // We can only have one BioBrain per grid
 class BioBrain {
     constructor() {
@@ -1142,23 +1230,32 @@ class BioBrain {
         }
         return this.instance;
     }
-    computeAction(state) {
+    async computeAction(state, date = new Date()) {
         // TODO calculate the efficiency for every transportation of power
         // Get the shortest distances between each gridItem to the rest of the gridItems
-        let shortestDistances = state.getShortestDistances();
+        const shortestDistances = state.getShortestDistances();
         // Create a clone of the graph becfore using it
         this.clonedGraph = state.cloneStateGraph();
         // Create an object of buildings with the energyProviders which supplied
-        let buildingSuppliers = this.chargeBuildings(shortestDistances);
+        const buildingSuppliers = await this.chargeBuildings(shortestDistances, date);
         // Create an object of smallBatteries with the energyProviders which supplied
-        let smallBatterySupplier = this.chargeSmallBatteries(shortestDistances);
+        const smallBatterySupplier = await this.chargeSmallBatteries(shortestDistances, date);
         // Create an object of largeBatteries with the energyProviders which supplied
-        let largeBatterySupplier = this.chargeLargebatteries(shortestDistances);
+        const largeBatterySupplier = await this.chargeLargebatteries(shortestDistances, date);
+        const totalPowerInput = this.calculateTotalInputPower(buildingSuppliers.inputPower, smallBatterySupplier.inputPower, largeBatterySupplier.inputPower);
+        const totalPowerOutput = this.calculateTotalOutputPower(buildingSuppliers.outputPower, smallBatterySupplier.outputPower, largeBatterySupplier.outputPower);
+        const efficiency = config.calculateEfficiency(totalPowerInput, totalPowerOutput);
         return new biogrid_simulator_1.BiogridAction({
-            ...buildingSuppliers,
-            ...smallBatterySupplier,
-            ...largeBatterySupplier
-        });
+            ...buildingSuppliers.supplyingPath,
+            ...smallBatterySupplier.supplyingPath,
+            ...largeBatterySupplier.supplyingPath,
+        }, efficiency);
+    }
+    calculateTotalInputPower(buildingInput, sBatteryInput, lBatteryInput) {
+        return buildingInput + sBatteryInput + lBatteryInput;
+    }
+    calculateTotalOutputPower(buildingOutput, sBatteryOutput, lBatteryOutput) {
+        return buildingOutput + sBatteryOutput + lBatteryOutput;
     }
     /**
      * This method gets the different griditems and places them in their respective classes
@@ -1169,86 +1266,86 @@ class BioBrain {
      * @returns an object of key-value pair @enum GRID_ITEM_NAMES : respective grid items list
      */
     getGridItems() {
-        let buildings = [];
-        let smallBatteries = [];
-        let largeBatteries = [];
-        let solarPanels = [];
+        const buildings = [];
+        const smallBatteries = [];
+        const largeBatteries = [];
+        const solarPanels = [];
         const allGridItems = this.clonedGraph.nodes();
         // TODO: Implement with instanceof
         // @see https://github.com/googleinterns/step141-2020/issues/54
-        allGridItems.map(item => {
+        allGridItems.map((item) => {
             const gridItem = this.clonedGraph.node(item);
-            if (gridItem.gridItemName.includes(config_1.GRID_ITEM_NAMES.ENERGY_USER)) {
+            if (gridItem.gridItemName.includes(config.GRID_ITEM_NAMES.ENERGY_USER)) {
                 buildings.push(gridItem);
             }
-            else if (gridItem.gridItemName.includes(config_1.GRID_ITEM_NAMES.SMALL_BATTERY)) {
+            else if (gridItem.gridItemName.includes(config.GRID_ITEM_NAMES.SMALL_BATTERY)) {
                 smallBatteries.push(gridItem);
             }
-            else if (gridItem.gridItemName.includes(config_1.GRID_ITEM_NAMES.LARGE_BATTERY)) {
+            else if (gridItem.gridItemName.includes(config.GRID_ITEM_NAMES.LARGE_BATTERY)) {
                 largeBatteries.push(gridItem);
             }
-            else if (gridItem.gridItemName.includes(config_1.GRID_ITEM_NAMES.SOLAR_PANEL)) {
+            else if (gridItem.gridItemName.includes(config.GRID_ITEM_NAMES.SOLAR_PANEL)) {
                 solarPanels.push(gridItem);
             }
         });
         return {
-            [config_1.GRID_ITEM_NAMES.ENERGY_USER]: buildings,
-            [config_1.GRID_ITEM_NAMES.SMALL_BATTERY]: smallBatteries,
-            [config_1.GRID_ITEM_NAMES.LARGE_BATTERY]: largeBatteries,
-            [config_1.GRID_ITEM_NAMES.SOLAR_PANEL]: solarPanels
+            [config.GRID_ITEM_NAMES.ENERGY_USER]: buildings,
+            [config.GRID_ITEM_NAMES.SMALL_BATTERY]: smallBatteries,
+            [config.GRID_ITEM_NAMES.LARGE_BATTERY]: largeBatteries,
+            [config.GRID_ITEM_NAMES.SOLAR_PANEL]: solarPanels,
         };
     }
     /**
      * This method is used for charging individual largeBatteries which might not have enough energy
      * It calls the @method determineSupplyingPath which calculates which supplier can give these large batteries power
-     * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+     * @returns @interface ResultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
+     * the one which can supplying, powerInput, and powerOutput
      */
-    chargeLargebatteries(shortestDistances) {
+    async chargeLargebatteries(shortestDistances, date) {
         const gridItems = this.getGridItems();
-        let largeBatteries = gridItems[config_1.GRID_ITEM_NAMES.LARGE_BATTERY];
-        let solarPanels = gridItems[config_1.GRID_ITEM_NAMES.SOLAR_PANEL];
+        let largeBatteries = gridItems[config.GRID_ITEM_NAMES.LARGE_BATTERY];
+        const solarPanels = gridItems[config.GRID_ITEM_NAMES.SOLAR_PANEL];
         // Assuming the large battery is not fully charged
         largeBatteries = largeBatteries.filter((battery) => !battery.isFull());
         // Filter the solar panels and remove the ones with the minimum energy or empty
-        solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
+        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels);
         // Create an array of the possible energy givers
-        const allEnergyProviders = [...solarPanels];
-        return this.determineSupplyingPath(largeBatteries, allEnergyProviders, shortestDistances);
+        const allEnergyProviders = [...solarPanelsFiltered];
+        return await this.determineSupplyingPath(largeBatteries, allEnergyProviders, shortestDistances, date);
     }
     /**
      * This method is used for charging individual smallBatteries which might not have energy energy
      * It calls the @method determineSupplyingPath which calculates which supplier can give these small batteries power
-     * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+     * @returns @interface ResultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
+     * the one which can supplying, powerInput, and powerOutput
      */
-    chargeSmallBatteries(shortestDistances) {
+    async chargeSmallBatteries(shortestDistances, date) {
         const gridItems = this.getGridItems();
-        let smallBatteries = gridItems[config_1.GRID_ITEM_NAMES.SMALL_BATTERY];
-        let largeBatteries = gridItems[config_1.GRID_ITEM_NAMES.LARGE_BATTERY];
-        let solarPanels = gridItems[config_1.GRID_ITEM_NAMES.SOLAR_PANEL];
+        let smallBatteries = gridItems[config.GRID_ITEM_NAMES.SMALL_BATTERY];
+        let largeBatteries = gridItems[config.GRID_ITEM_NAMES.LARGE_BATTERY];
+        const solarPanels = gridItems[config.GRID_ITEM_NAMES.SOLAR_PANEL];
         // Assuming the small batteries are not fully charged
         smallBatteries = smallBatteries.filter((battery) => !battery.isFull());
         // Filter the large batteries and remove the ones which do not have power in them
         largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
         // Filter the solar panels and remove the ones with the minimum energy or empty
-        solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
+        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels);
         // Create an array of the possible energy givers
-        const allEnergyProviders = [
-            ...solarPanels,
-            ...largeBatteries,
-        ];
-        return this.determineSupplyingPath(smallBatteries, allEnergyProviders, shortestDistances);
+        const allEnergyProviders = [...solarPanelsFiltered, ...largeBatteries];
+        return await this.determineSupplyingPath(smallBatteries, allEnergyProviders, shortestDistances, date);
     }
     /**
      * This method is used for charging the individual buildings which might not have energy energy
      * It calls the @method determineSupplyingPath which calculates which supplier can give these buildings power
-     * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+     * @returns @interface ResultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
+     * the one which can supplying, powerInput, and powerOutput
      */
-    chargeBuildings(shortestDistances) {
+    async chargeBuildings(shortestDistances, date) {
         const gridItems = this.getGridItems();
-        let buildings = gridItems[config_1.GRID_ITEM_NAMES.ENERGY_USER];
-        let smallBatteries = gridItems[config_1.GRID_ITEM_NAMES.SMALL_BATTERY];
-        let largeBatteries = gridItems[config_1.GRID_ITEM_NAMES.LARGE_BATTERY];
-        let solarPanels = gridItems[config_1.GRID_ITEM_NAMES.SOLAR_PANEL];
+        let buildings = gridItems[config.GRID_ITEM_NAMES.ENERGY_USER];
+        let smallBatteries = gridItems[config.GRID_ITEM_NAMES.SMALL_BATTERY];
+        let largeBatteries = gridItems[config.GRID_ITEM_NAMES.LARGE_BATTERY];
+        const solarPanels = gridItems[config.GRID_ITEM_NAMES.SOLAR_PANEL];
         // Assuming that the houses asking for power will not have power in them.
         // Do not consider building with full power capacity
         buildings = buildings.filter((building) => {
@@ -1259,14 +1356,14 @@ class BioBrain {
         smallBatteries = smallBatteries.filter((battery) => !battery.isEmpty());
         largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
         // Filter the solar panels and remove the ones with the minimum energy or empty
-        solarPanels = solarPanels.filter((solarPanel) => !solarPanel.isEmpty());
+        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels);
         // Create an array of the possible energy givers
         const allEnergyProviders = [
             ...smallBatteries,
-            ...solarPanels,
+            ...solarPanelsFiltered,
             ...largeBatteries,
         ];
-        return this.determineSupplyingPath(buildings, allEnergyProviders, shortestDistances);
+        return await this.determineSupplyingPath(buildings, allEnergyProviders, shortestDistances, date);
     }
     /**
      * This method determines which grid item can supply energy to the grid item without it.
@@ -1276,11 +1373,14 @@ class BioBrain {
      * @param supplyingAgents holds a list of grid items (@class BioBattery or @class SolarPanel)
      * which can supply energy to @param recievingAgents
      * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
-     * @returns @interface SupplyingPath which holds a key value pair of a gridItem requesting mapping to the one which can supplying
+     * @returns @interface ResultingSupplyingPath which holds a key value pair of @interface supplyingPath requesting mapping to
+     * the one which can supplying, powerInput, and powerOutput
      */
-    determineSupplyingPath(recievingAgents, supplyingAgents, shortestDistances) {
+    async determineSupplyingPath(recievingAgents, supplyingAgents, shortestDistances, date) {
         // Create an object of buildings with the energyProviders which supplied
-        let supplyToSupplyFromAgents = {};
+        const supplyToSupplyFromAgents = {};
+        let totalPowerInput = 0;
+        let totalPowerOutput = 0;
         // Look at each gridItem requesting for energy individually and keep track of the which grid item
         //  supplied it energy so that it can not be requested energy when it doesn't have it
         for (const recievingAgent of recievingAgents) {
@@ -1288,7 +1388,10 @@ class BioBrain {
             // TODO: advancement For now implement all or nothing. If battery doesn't have all the energy required, ignore it
             // @see https://github.com/googleinterns/step141-2020/issues/54
             const energyReq = recievingAgent.getMaxCapacity() - recievingAgent.getEnergyInJoules();
-            // set the shortest distance between the two values supplier and receiver to be +infinity
+            let powerSupplied = 0;
+            // Get the voltage to be received
+            const voltageReq = config.calculateVoltageFromPower(energyReq, recievingAgent.gridItemResistance);
+            // Set the shortest distance between the two values supplier and receiver to be +infinity
             let shortestDistance = Number.POSITIVE_INFINITY;
             // Keep track of the batteryPosition
             let indexOfProvider = -1;
@@ -1296,13 +1399,31 @@ class BioBrain {
             // This has to change when you consider different sources giving the receiver energy
             for (let index = 0; index < supplyingAgents.length; index++) {
                 // check the distance between the receiver and supplier. If it is the minimal, change the supplier index
-                const newShortestDistance = shortestDistances[supplyingAgents[index].gridItemName][recievingAgent.gridItemName]
-                    .distance;
-                const energyProvided = supplyingAgents[index].getEnergyInJoules();
-                if (newShortestDistance < shortestDistance &&
-                    energyProvided >= energyReq) {
-                    shortestDistance = newShortestDistance;
-                    indexOfProvider = index;
+                const newShortestDistance = shortestDistances[supplyingAgents[index].gridItemName][recievingAgent.gridItemName].distance;
+                if (newShortestDistance < shortestDistance) {
+                    // Calculate the resistance in the wires whose length is the shortest distance
+                    const resistanceInWires = config.calculateResistance(newShortestDistance);
+                    // calculate the resistance in all gridItems which are in the shortest path
+                    const resistanceInGridItems = this.determineResistanceInShortestPath(supplyingAgents[index].gridItemName, recievingAgent.gridItemName, shortestDistances);
+                    // The total resistance in the shortest path including the one for the gridItems in the shortest path
+                    const totalResistance = resistanceInGridItems + resistanceInWires;
+                    // Calculate the circuit current. The circuit here is in series which implies that the current is constant
+                    const currentInCircuit = config.calculateCurrent(voltageReq, resistanceInGridItems, resistanceInWires);
+                    // Using the current, calculate the power in the entire circuit
+                    const energyProvided = config.calculatePowerWithCurrent(currentInCircuit, totalResistance);
+                    // Get the total energy which can be supplied by the supplying agent
+                    let energyInSupplier;
+                    if (supplyingAgents[index].gridItemName.includes(config_1.GRID_ITEM_NAMES.SOLAR_PANEL)) {
+                        energyInSupplier = await supplyingAgents[index].getEnergyInJoules(date);
+                    }
+                    else {
+                        energyInSupplier = await Promise.resolve(supplyingAgents[index].getEnergyInJoules());
+                    }
+                    if (energyInSupplier >= energyProvided) {
+                        shortestDistance = newShortestDistance;
+                        indexOfProvider = index;
+                        powerSupplied = energyProvided;
+                    }
                 }
             }
             // In case there is no supplier for that receiver, ignore the reciever
@@ -1311,24 +1432,68 @@ class BioBrain {
             if (indexOfProvider === -1) {
                 continue;
             }
+            // Update the power output and power input
+            totalPowerOutput += energyReq;
+            totalPowerInput += powerSupplied;
             // Update the supplier so that it cannot be asked for power again when it shouldn't be asked
             const provideFrom = supplyingAgents[indexOfProvider];
             const provideTo = recievingAgent;
-            if (provideTo instanceof biogrid_simulator_1.BioBattery) {
-                provideTo.startCharging(energyReq);
-            }
-            else {
-                provideTo.increaseEnergy(energyReq);
-            }
-            provideFrom.supplyPower(energyReq);
             this.clonedGraph.setNode(provideFrom.gridItemName, provideFrom);
             this.clonedGraph.setNode(provideTo.gridItemName, provideTo);
-            // add the pair of receiver : supplier in supplyToSupplyFromAgents
-            supplyingAgents[indexOfProvider].supplyPower(energyReq);
+            // Add the pair of receiver : supplier in supplyToSupplyFromAgents
             supplyToSupplyFromAgents[recievingAgent.gridItemName] =
                 supplyingAgents[indexOfProvider].gridItemName;
         }
-        return supplyToSupplyFromAgents;
+        return await {
+            supplyingPath: supplyToSupplyFromAgents,
+            inputPower: totalPowerInput,
+            outputPower: totalPowerOutput,
+        };
+    }
+    /**
+     * This method determmines which grid item is in the shortest path.
+     * @param start is the starting gridItem name in the shortestPath
+     * @param dest is gridItem name for the destination in the shortestPath
+     * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
+     * @returns a list of the names for the gridItems in the shortestPath
+     */
+    determineGridItemsInShortestPath(start, dest, shortestDistances) {
+        // Keeps track of the gridItems through which the power is going to pass
+        let gridItemsInShortestPath = [dest];
+        // Keeps track of the parent / predecessor of a vertex in the shortest distance path
+        let parent = shortestDistances[start][dest].predecessor;
+        while (parent !== start) {
+            gridItemsInShortestPath.push(parent);
+            parent = shortestDistances[start][parent].predecessor;
+        }
+        gridItemsInShortestPath.push(start);
+        return gridItemsInShortestPath;
+    }
+    /**
+     * This method determines the resistance of the gridItems in the shortest path.
+     * @param start is the starting gridItem name in the shortestPath
+     * @param dest is gridItem name for the destination in the shortestPath
+     * @param shortestDistances holds an object of key, value pair of vertex -> adj vertices with their shortest distance to the key vertex
+     * @returns the total resistance of the gridItems in the shortest path excluding the wires (shortest distance itself)
+     */
+    determineResistanceInShortestPath(start, dest, shortestDistances) {
+        const gridItemsInShortestPath = this.determineGridItemsInShortestPath(start, dest, shortestDistances);
+        let gridItemResistance = 0;
+        for (const gridItemName of gridItemsInShortestPath) {
+            const gridItem = this.clonedGraph.node(gridItemName);
+            gridItemResistance += gridItem.gridItemResistance;
+        }
+        return gridItemResistance;
+    }
+    async filterSolarPanelsByEnergyAmount(solarPanels) {
+        const solarPanelsFiltered = [];
+        for (let i = 0; i < solarPanels.length; i++) {
+            const solarPanel = solarPanels[i];
+            if (!(await solarPanel.isEmpty())) {
+                solarPanelsFiltered.push(solarPanel);
+            }
+        }
+        return solarPanelsFiltered;
     }
 }
 exports.BioBrain = BioBrain;
@@ -1353,22 +1518,23 @@ tslib_1.__exportStar(__webpack_require__(50), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const weather_1 = __webpack_require__(51);
-const bioenergy_source_1 = __webpack_require__(53);
-const grid_simulator_1 = __webpack_require__(3);
+const bioenergy_source_1 = __webpack_require__(55);
+const grid_simulator_1 = __webpack_require__(4);
 const config_1 = __webpack_require__(1);
 class SolarPanel extends bioenergy_source_1.EnergySource {
     /**
      * @param efficiency - default to 17.5% efficiency as solar panels are often between 15% and 20% efficiency
      */
-    constructor(x, y, sizeSqMtr, gridItemName = config_1.GRID_ITEM_NAMES.SOLAR_PANEL, efficiency = 0.175, longitude = 0, latitude = 0, date = new Date()) {
-        super(x, y, efficiency, longitude, latitude);
+    constructor(solarPanelParams) {
+        super(solarPanelParams);
         this.gridItemResistance = config_1.RESISTANCE.SOLAR_PANEL;
-        if (!this.validateInputsSolarPanel(sizeSqMtr)) {
-            throw new Error(`Cannot create a solar panel object with values of area ${sizeSqMtr}`);
+        if (!this.validateInputsSolarPanel(solarPanelParams.areaSquareMeters)) {
+            throw new Error(`Cannot create a solar panel object with values of area ${solarPanelParams.areaSquareMeters}`);
         }
-        this.sizeSqMtr = sizeSqMtr;
-        this.gridItemName = gridItemName;
-        this.date = date;
+        this.areaSquareMeters = solarPanelParams.areaSquareMeters;
+        this.gridItemName = solarPanelParams.gridItemName;
+        this.date = solarPanelParams.date ? solarPanelParams.date : new Date();
+        this.weatherLib = new weather_1.WeatherLib(this.date, this.longitude, this.latitude);
     }
     validateInputsSolarPanel(area) {
         const validator = {
@@ -1377,13 +1543,20 @@ class SolarPanel extends bioenergy_source_1.EnergySource {
         };
         return grid_simulator_1.validate(validator);
     }
-    getPowerAmount(date) {
-        const intensity = weather_1.getSunlight(date, this.longitude, this.latitude);
-        const powerPerSqrMeter = this.intensityToKiloWattsPerSquareMeter(intensity);
-        return powerPerSqrMeter * this.sizeSqMtr * this.efficiency;
+    async getPowerAmount(date) {
+        if (!this.weatherLib.isSetup()) {
+            await this.weatherLib.setup();
+        }
+        // Solar panels do not produce energy at night
+        if (!this.weatherLib.isDay(date)) {
+            return 0;
+        }
+        const cloudCoverage = this.weatherLib.getCloudCoverage(date);
+        const powerPerSqrMeter = this.cloudCoverageToKiloWattsPerSquareMeter(cloudCoverage);
+        return powerPerSqrMeter * this.areaSquareMeters * this.efficiency;
     }
     supplyPower(requiredPower) {
-        // TODO implement this when you return the amount of power 
+        // TODO implement this when you return the amount of power
         // TODO that the solar panel holds at the particular moment
         // subtract requiredPower from the current and return it, keep track of the remaining power
         return requiredPower;
@@ -1392,15 +1565,19 @@ class SolarPanel extends bioenergy_source_1.EnergySource {
      * This method returns the current power that can be generated by
      * the solar panel at that given time
      */
-    getEnergyInJoules() {
-        return this.getPowerAmount(this.date);
+    async getEnergyInJoules(date) {
+        return await this.getPowerAmount(this.date || date);
     }
-    isEmpty() {
-        return this.getEnergyInJoules() === 0;
+    async isEmpty() {
+        return (await this.getEnergyInJoules()) === 0;
     }
-    intensityToKiloWattsPerSquareMeter(intensity) {
-        // Calculation derived from https://www.researchgate.net/post/Howto_convert_solar_intensity_in_LUX_to_watt_per_meter_square_for_sunlight
-        return config_1.SOLAR_PANEL.KILOLUX_TO_KILOWATT_PER_SQUARE_METER * intensity;
+    cloudCoverageToKiloWattsPerSquareMeter(cloudCoverage) {
+        // CalculationDerived from https://scool.larc.nasa.gov/lesson_plans/CloudCoverSolarRadiation.pdf
+        return ((config_1.SOLAR_PANEL.CLEAR_SKY_POWER_WATTS *
+            (1 -
+                config_1.SOLAR_PANEL.CLOUD_COVERAGE_SCALING_CONSTANT *
+                    Math.pow(cloudCoverage, 3))) /
+            1000);
     }
 }
 exports.SolarPanel = SolarPanel;
@@ -1424,31 +1601,108 @@ tslib_1.__exportStar(__webpack_require__(52), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getSunlight(date, longitude, latitude) {
-    // TODO have lux be determined by the time and area, see https://github.com/googleinterns/step141-2020/issues/31
-    // Average amount for a clear day
-    return 10;
+const tslib_1 = __webpack_require__(0);
+const node_fetch_1 = tslib_1.__importDefault(__webpack_require__(53));
+// TODO put api keys into their own lib
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const apiKey = __webpack_require__(54);
+class WeatherLib {
+    constructor(day, longitude, latitude) {
+        this.day = day;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.weatherData = {};
+        this.setupOccured = false;
+    }
+    async setup() {
+        const url = `http://api.weatherapi.com/v1/history.json?key=${apiKey.weatherapi}&q=${this.latitude},${this.longitude}&dt=${this.formatDate(this.day)}`;
+        const ret = await node_fetch_1.default(url);
+        const body = await ret.json();
+        this.weatherData = body.forecast.forecastday[0].hour
+            .map((period) => {
+            return {
+                time: this.formatDateWithHour(new Date(period.time)),
+                cloudCoverage: period.cloud / 100,
+                isDay: period.is_day === 1,
+            };
+        })
+            .reduce((map, obj) => {
+            map[obj.time] = {
+                cloudCoverage: obj.cloudCoverage,
+                isDay: obj.isDay,
+            };
+            return map;
+        }, {});
+        this.setupOccured = true;
+    }
+    isSetup() {
+        return this.setupOccured;
+    }
+    getCloudCoverage(date) {
+        const dateFormatted = this.formatDateWithHour(date);
+        if (!this.weatherData[dateFormatted]) {
+            throw new Error(`Date ${dateFormatted} not found within the specified time range`);
+        }
+        return this.weatherData[dateFormatted].cloudCoverage;
+    }
+    isDay(date) {
+        const dateFormatted = this.formatDateWithHour(date);
+        if (!this.weatherData[dateFormatted]) {
+            throw new Error(`Date ${dateFormatted} not found within the specified time range`);
+        }
+        return this.weatherData[dateFormatted].isDay;
+    }
+    formatDateWithHour(date) {
+        return `${this.formatDate(date)}:${date.getHours()}`;
+    }
+    formatDate(date) {
+        let d = new Date(date), month = `${(d.getMonth() + 1)}`, day = `${d.getDate()}`, year = d.getFullYear();
+        if (month.length < 2)
+            month = `0${month}`;
+        if (day.length < 2)
+            day = `0${day}`;
+        return [year, month, day].join('-');
+    }
 }
-exports.getSunlight = getSunlight;
+exports.WeatherLib = WeatherLib;
 
 
 /***/ }),
 /* 53 */
+/***/ (function(module, exports) {
+
+module.exports = require("node-fetch");
+
+/***/ }),
+/* 54 */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"weatherapi\":\"2e19a5f6f1134a61831111446202307\"}");
+
+/***/ }),
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const grid_simulator_1 = __webpack_require__(3);
+const grid_simulator_1 = __webpack_require__(4);
 class EnergySource {
-    constructor(x, y, efficiency, longitude = 0, latitude = 0) {
-        this.position = { x, y };
-        if (!this.validateInputs(efficiency)) {
-            throw new Error(`Cannot create a solar panel object with values: (${efficiency})`);
+    constructor(energyParams) {
+        // Long and latitude for the solar panel's position
+        this.longitude = 0;
+        this.latitude = 0;
+        this.position = { x: energyParams.x, y: energyParams.y };
+        if (!this.validateInputs(energyParams.efficiency)) {
+            throw new Error(`Cannot create a solar panel object with values: (${energyParams.efficiency})`);
         }
-        this.efficiency = efficiency;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.efficiency = energyParams.efficiency;
+        if (energyParams.longitude) {
+            this.longitude = energyParams.longitude;
+        }
+        if (energyParams.latitude) {
+            this.latitude = energyParams.latitude;
+        }
     }
     validateInputs(efficiency) {
         const efficiencyValidator = {
@@ -1467,39 +1721,43 @@ exports.EnergySource = EnergySource;
 
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(55), exports);
+tslib_1.__exportStar(__webpack_require__(57), exports);
 
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = __webpack_require__(1);
-const biogrid_simulator_1 = __webpack_require__(2);
+const biogrid_simulator_1 = __webpack_require__(3);
 class Biogrid {
     constructor(town, opts) {
+        this.town = town;
+        const todayMidnight = new Date();
+        todayMidnight.setHours(0);
+        this.startDate = opts.startDate || todayMidnight;
         // Batteries
         const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
         const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
         this.smallBatteries = this.createBatteries(smallBatteryPositions, config_1.GRID_ITEM_NAMES.SMALL_BATTERY);
         this.largeBatteries = this.createBatteries(largeBatteryPositions, config_1.GRID_ITEM_NAMES.LARGE_BATTERY);
-        // Towns
-        this.town = town;
-        // Enery Source
+        // Energy Source
         // TODO implement the solar panels
         const solarPanelPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSolarPanels);
         this.solarPanels = this.createSolarPanels(solarPanelPositions);
-        this.state = new biogrid_simulator_1.BiogridState(this.createGridItems());
+        this.state = new biogrid_simulator_1.BiogridState(this.createGridItems(), town.getTownSize());
+        // Set the effieciency to 0 at the beginning
+        this.efficiency = 0;
     }
     createGridItems() {
         return [
@@ -1515,6 +1773,9 @@ class Biogrid {
     getSystemState() {
         return this.state;
     }
+    getEfficiency() {
+        return this.efficiency;
+    }
     getJsonGraphDetails() {
         return this.state.getJsonGraph();
     }
@@ -1528,7 +1789,14 @@ class Biogrid {
         const initEnergy = gridItemName === config_1.GRID_ITEM_NAMES.LARGE_BATTERY
             ? config_1.LARGE_BATTERY.DEFAULT_START_ENERGY
             : config_1.SMALL_BATTERY.DEFAULT_START_ENERGY;
-        return positions.map((position, index) => new biogrid_simulator_1.BioBattery(position.x, position.y, `${gridItemName}-${index}`, batteryResistance, initEnergy, maxCapacity));
+        return positions.map((position, index) => new biogrid_simulator_1.BioBattery({
+            x: position.x,
+            y: position.y,
+            gridItemName: `${gridItemName}-${index}`,
+            gridItemResistance: batteryResistance,
+            energyInJoules: initEnergy,
+            maxCapacity,
+        }));
     }
     /**
      * This method creates a list of solar panels placed depending on their positions
@@ -1536,7 +1804,22 @@ class Biogrid {
      */
     // TODO pass a list of equal length to hold the area for the solar panels
     createSolarPanels(positions) {
-        return positions.map((position, index) => new biogrid_simulator_1.SolarPanel(position.x, position.y, config_1.SOLAR_PANEL.AREA, `${config_1.GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`));
+        return positions.map((position, index) => new biogrid_simulator_1.SolarPanel({
+            x: position.x,
+            y: position.y,
+            efficiency: 0.75,
+            areaSquareMeters: config_1.SOLAR_PANEL.AREA,
+            gridItemName: `${config_1.GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`,
+            date: this.startDate,
+        }));
+    }
+    /**
+     * Drain the energy users according to the time of day
+     */
+    drainEnergyUsers(date) {
+        this.town.getEnergyUsers().forEach((energyUser) => {
+            energyUser.decreaseEnergyAccordingToTimeOfDay(date);
+        });
     }
     /**
      * This method takes the results of th brain and then it changes the state graph as suggested by the brain.
@@ -1545,18 +1828,24 @@ class Biogrid {
      * @returns a the current state with a new graph which includes the changes that were suggested by the brain
      */
     takeAction(action) {
+        const powerEdges = [];
+        // Set new efficiency
+        this.efficiency = action.getEfficiency();
         // RETURN a new BiogridState
         const allSupplyingPaths = action.getSupplyingPaths();
+        this.state.resetPowerOnEdges();
         const clonedGraph = this.state.cloneStateGraph();
         for (const supplyPath in allSupplyingPaths) {
             const oldGridItem = this.state.getGridItem(supplyPath);
+            // take energy from the supplying grid item and transfer it to the energy user
             const supplyingGridItem = this.state.getGridItem(allSupplyingPaths[supplyPath]);
             const typeOldGridItem = this.getGridItemType(oldGridItem);
+            const energyUser = oldGridItem;
+            const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
+            const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
             if (typeOldGridItem === config_1.GRID_ITEM_NAMES.ENERGY_USER) {
-                const energyUser = oldGridItem;
-                const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
-                const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
-                if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.LARGE_BATTERY || typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.SMALL_BATTERY) {
+                if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.LARGE_BATTERY ||
+                    typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.SMALL_BATTERY) {
                     const battery = supplyingGridItem;
                     battery.supplyPower(energyUserReq);
                     clonedGraph.setNode(battery.gridItemName, battery);
@@ -1573,9 +1862,6 @@ class Biogrid {
                 clonedGraph.setNode(energyUser.gridItemName, energyUser);
             }
             else if (typeOldGridItem === config_1.GRID_ITEM_NAMES.SMALL_BATTERY) {
-                const energyUser = oldGridItem;
-                const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
-                const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
                 if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.LARGE_BATTERY) {
                     const battery = supplyingGridItem;
                     battery.supplyPower(energyUserReq);
@@ -1593,9 +1879,6 @@ class Biogrid {
                 clonedGraph.setNode(energyUser.gridItemName, energyUser);
             }
             else if (typeOldGridItem === config_1.GRID_ITEM_NAMES.LARGE_BATTERY) {
-                const energyUser = oldGridItem;
-                const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
-                const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
                 if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.SOLAR_PANEL) {
                     const solarpanel = supplyingGridItem;
                     solarpanel.supplyPower(energyUserReq);
@@ -1606,8 +1889,17 @@ class Biogrid {
                 energyUser.startCharging(energyUserReq);
                 clonedGraph.setNode(energyUser.gridItemName, energyUser);
             }
+            powerEdges.push({
+                v: supplyingGridItem.gridItemName,
+                w: energyUser.gridItemName,
+                // convert kilowatthours into kilowatts
+                power: energyUserReq / config_1.TIME.DISCRETE_UNIT_HOURS,
+            });
         }
         this.state.setnewStateGraph(clonedGraph);
+        powerEdges.forEach((powerEdge) => {
+            this.state.setPowerBetweenNodes(powerEdge.v, powerEdge.w, powerEdge.power);
+        });
         return this.state;
     }
     getGridItemType(gridItem) {
@@ -1647,35 +1939,6 @@ exports.Biogrid = Biogrid;
 
 
 /***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(57), exports);
-
-
-/***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-class BiogridAction {
-    constructor(supplyPath) {
-        this.supplyPath = supplyPath;
-    }
-    getSupplyingPaths() {
-        return this.supplyPath;
-    }
-}
-exports.BiogridAction = BiogridAction;
-
-
-/***/ }),
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1693,28 +1956,66 @@ tslib_1.__exportStar(__webpack_require__(59), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+class BiogridAction {
+    constructor(supplyPath, efficiency) {
+        this.supplyPath = supplyPath;
+        this.efficiency = efficiency;
+    }
+    getSupplyingPaths() {
+        return this.supplyPath;
+    }
+    getEfficiency() {
+        return this.efficiency;
+    }
+}
+exports.BiogridAction = BiogridAction;
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(61), exports);
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
 const graphlib = tslib_1.__importStar(__webpack_require__(8));
 const config_1 = __webpack_require__(1);
 class BiogridState {
     // TODO think about implement it StateGraphVertex[] as an object of key: name -> value: StateGraphVertex
-    constructor(vertices) {
+    constructor(vertices, townSize) {
+        this.townSize = townSize;
         // Directed so as to have two edges between A and B, but in opposite directions
         this.graph = new graphlib.Graph({ directed: true });
         // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
         const grid = {
             gridItemName: config_1.GRID_ITEM_NAMES.GRID,
             gridItemResistance: config_1.RESISTANCE.GRID,
+            // Add the grid in the center of the town based on the townSize
             getRelativePosition() {
-                return { x: 0, y: 0 };
+                return {
+                    x: Math.floor(townSize.width / 2),
+                    y: Math.floor(townSize.height / 2),
+                };
             }
         };
         this.graph.setNode(grid.gridItemName, grid);
         // Add all the vertices as nodes/vertices of the graph, with a name for
         // the particular grid item and label which is data for the particular vertex as the GridItem itself
-        vertices.map(vertex => this.graph.setNode(vertex.gridItemName, vertex));
+        vertices.map((vertex) => this.graph.setNode(vertex.gridItemName, vertex));
         // Add all the edges that can be formed into the graph, read the add method for how it is done
-        vertices.map(vertex => this.connectNewVertex(vertex));
+        vertices.map((vertex) => this.connectNewVertex(vertex));
     }
     /**
      * Method to return the graph for the states of the grid
@@ -1740,6 +2041,22 @@ class BiogridState {
      */
     setnewStateGraph(newGraph) {
         this.graph = newGraph;
+    }
+    /**
+     * Set power between the nodes via the edges of the state graph
+     */
+    setPowerBetweenNodes(v, w, power) {
+        const labelFromV = this.graph.edge(v, config_1.GRID_ITEM_NAMES.GRID);
+        const labelToW = this.graph.edge(config_1.GRID_ITEM_NAMES.GRID, w);
+        this.graph.setEdge(v, config_1.GRID_ITEM_NAMES.GRID, { distance: labelFromV.distance, power });
+        this.graph.setEdge(config_1.GRID_ITEM_NAMES.GRID, w, { distance: labelToW.distance, power });
+    }
+    /**
+     * Set all edge power to 0
+     */
+    resetPowerOnEdges() {
+        const edges = this.graph.edges();
+        edges.forEach((edge) => this.resetEdge(edge));
     }
     /**
      * Method finds all the vertices in the graph and returns tehir names
@@ -1770,8 +2087,18 @@ class BiogridState {
     }
     getWeightbyGraph(graph) {
         return function (edge) {
-            return graph.edge(edge);
+            return graph.edge(edge).distance;
         };
+    }
+    /**
+     * Reset an edge by changing its power to 0
+     */
+    resetEdge(edge) {
+        const labels = this.graph.edge(edge);
+        this.graph.setEdge(edge.v, edge.w, {
+            distance: labels.distance,
+            power: 0
+        });
     }
     /**
      * When given a specific edge, return the weight or distance between the two vertices
@@ -1779,7 +2106,7 @@ class BiogridState {
      * @returns the weight or the distance between the vertices of @param edge
      */
     getWeightEdge(edge) {
-        return this.graph.edge(edge);
+        return this.graph.edge(edge).distance;
     }
     /**
      * Get all GridItem positions in the graph
@@ -1809,21 +2136,21 @@ class BiogridState {
             let edge;
             // Solar panels to the grid only
             // Searching for includes GRID so that when scaling it is easy to add multiple grids
-            if (newVertexName.includes(config_1.GRID_ITEM_NAMES.SOLAR_PANEL)
-                && vertex.includes(config_1.GRID_ITEM_NAMES.GRID)) {
+            if (newVertexName.includes(config_1.GRID_ITEM_NAMES.SOLAR_PANEL) &&
+                vertex.includes(config_1.GRID_ITEM_NAMES.GRID)) {
                 edge = { v: newVertexName, w: vertex, weight: distance };
             }
-            else if (newVertexName.includes(config_1.GRID_ITEM_NAMES.LARGE_BATTERY)
-                && vertex.includes(config_1.GRID_ITEM_NAMES.GRID)) {
+            else if (newVertexName.includes(config_1.GRID_ITEM_NAMES.LARGE_BATTERY) &&
+                vertex.includes(config_1.GRID_ITEM_NAMES.GRID)) {
                 edge = { v: newVertexName, w: vertex, weight: distance };
                 // Add the opposite edge from grid to battery
-                this.graph.setEdge(vertex, newVertexName, distance);
+                this.graph.setEdge(vertex, newVertexName, { distance });
             }
             else if (newVertexName.includes(config_1.GRID_ITEM_NAMES.SMALL_BATTERY)) {
                 if (vertex.includes(config_1.GRID_ITEM_NAMES.GRID)) {
                     edge = { v: newVertexName, w: vertex, weight: distance };
                     // Add the opposite edge from grid to battery
-                    this.graph.setEdge(vertex, newVertexName, distance);
+                    this.graph.setEdge(vertex, newVertexName, { distance });
                 }
                 else if (vertex.includes(config_1.GRID_ITEM_NAMES.ENERGY_USER)) {
                     edge = { v: newVertexName, w: vertex, weight: distance };
@@ -1834,15 +2161,16 @@ class BiogridState {
                 }
             }
             // On gridItem Energy User do not add edge (A, A)
-            else if (newVertexName.includes(config_1.GRID_ITEM_NAMES.ENERGY_USER)
-                && vertex !== newVertexName) {
-                if (vertex.includes(config_1.GRID_ITEM_NAMES.GRID) || vertex.includes(config_1.GRID_ITEM_NAMES.SMALL_BATTERY)) {
+            else if (newVertexName.includes(config_1.GRID_ITEM_NAMES.ENERGY_USER) &&
+                vertex !== newVertexName) {
+                if (vertex.includes(config_1.GRID_ITEM_NAMES.GRID) ||
+                    vertex.includes(config_1.GRID_ITEM_NAMES.SMALL_BATTERY)) {
                     edge = { v: vertex, w: newVertexName, weight: distance };
                 }
                 else if (vertex.includes(config_1.GRID_ITEM_NAMES.ENERGY_USER)) {
                     edge = { v: newVertexName, w: vertex, weight: distance };
                     // Add the reverse edge from the new energy user/ building to the other building
-                    this.graph.setEdge(vertex, newVertexName, distance);
+                    this.graph.setEdge(vertex, newVertexName, { distance });
                 }
                 else {
                     // Continue since there is no edge to create
@@ -1853,7 +2181,7 @@ class BiogridState {
                 // Do not connect the parts of the grid which don't have to be connected
                 continue;
             }
-            this.graph.setEdge(edge.v, edge.w, edge.weight);
+            this.graph.setEdge(edge.v, edge.w, { distance: edge.weight });
         }
     }
     /**
@@ -1868,18 +2196,18 @@ exports.BiogridState = BiogridState;
 
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(61), exports);
+tslib_1.__exportStar(__webpack_require__(63), exports);
 
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1894,20 +2222,26 @@ class Building {
     /**
      * @param {number} energy Amount of energy the building will have in joules.
      */
-    constructor(energy, x, y, gridItemName = config_1.GRID_ITEM_NAMES.ENERGY_USER, minCapacity = config_1.BUILDING.MIN_CAPACITY, maxCapacity = config_1.BUILDING.MAX_CAPACITY) {
-        this.minCapacity = minCapacity;
-        this.maxCapacity = maxCapacity;
+    constructor(buildingParams) {
         // Initial id value, will be changed by rural area.
         this.buildingId = -1;
         /** Defines the resistance of the building due to the wiring */
         this.gridItemResistance = config_1.RESISTANCE.BUILDING;
-        this.relativePosition = { x, y };
-        this.gridItemName = gridItemName;
-        if (this.isPositive(energy)) {
-            this.energyInJoules = energy;
+        this.minCapacity = config_1.BUILDING.MIN_CAPACITY;
+        this.maxCapacity = config_1.BUILDING.MAX_CAPACITY;
+        this.relativePosition = { x: buildingParams.x, y: buildingParams.y };
+        this.gridItemName = buildingParams.gridItemName;
+        if (this.isPositive(buildingParams.energy)) {
+            this.energyKilowatt = buildingParams.energy;
         }
         else {
             throw new Error("Can't create a building with negative energy!");
+        }
+        if (buildingParams.minCapacity) {
+            this.minCapacity = buildingParams.minCapacity;
+        }
+        if (buildingParams.maxCapacity) {
+            this.maxCapacity = buildingParams.maxCapacity;
         }
     }
     getMinCapacity() {
@@ -1929,14 +2263,18 @@ class Building {
         this.buildingId = Id;
     }
     getEnergyInJoules() {
-        return this.energyInJoules;
+        return this.energyKilowatt;
+    }
+    decreaseEnergyAccordingToTimeOfDay(date) {
+        const energyUsed = this.getAverageEnergyUsagePerDay(date.getHours());
+        this.decreaseEnergy(energyUsed);
     }
     /**
      * This method adds energy to the current building's power.
      */
     increaseEnergy(energy) {
         if (this.isPositive(energy)) {
-            this.energyInJoules += energy;
+            this.energyKilowatt += energy;
         }
         else {
             throw new Error("Can't add negative energy!");
@@ -1950,30 +2288,33 @@ class Building {
             throw new Error("Can't use a negative amount of energy!");
         }
         // Building can't have a negative amount of energy in store.
-        if (energy >= this.energyInJoules) {
-            this.energyInJoules = 0;
+        if (energy >= this.energyKilowatt) {
+            this.energyKilowatt = 0;
         }
         else {
-            this.energyInJoules -= energy;
+            this.energyKilowatt -= energy;
         }
+    }
+    getAverageEnergyUsagePerDay(hourOfDay) {
+        return config_1.BUILDING.ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY[hourOfDay.toString()];
     }
 }
 exports.Building = Building;
 
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(63), exports);
+tslib_1.__exportStar(__webpack_require__(65), exports);
 
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2035,7 +2376,7 @@ exports.RuralArea = RuralArea;
 
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2046,7 +2387,7 @@ tslib_1.__exportStar(__webpack_require__(7), exports);
 
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"basePath\":\"/service\",\"consumes\":[\"application/json\"],\"definitions\":{\"BiogridSimulationResults\":{\"properties\":{\"energyWastedFromSource\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"energyWastedInTransportation\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"timeWithoutEnoughEnergy\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"townSize\":{\"properties\":{\"width\":{\"type\":\"number\",\"format\":\"double\"},\"height\":{\"type\":\"number\",\"format\":\"double\"}},\"required\":[\"height\",\"width\"],\"type\":\"object\"},\"states\":{\"items\":{\"additionalProperties\":true,\"type\":\"object\"},\"type\":\"array\"}},\"required\":[\"townSize\",\"states\"],\"type\":\"object\",\"additionalProperties\":true},\"NewBiogridOpts\":{\"properties\":{\"startDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"endDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"smallBatteryCells\":{\"type\":\"number\",\"format\":\"double\"},\"largeBatteryCells\":{\"type\":\"number\",\"format\":\"double\"},\"numBuildings\":{\"type\":\"number\",\"format\":\"double\"},\"numSolarPanels\":{\"type\":\"number\",\"format\":\"double\"},\"townHeight\":{\"type\":\"number\",\"format\":\"double\"},\"townWidth\":{\"type\":\"number\",\"format\":\"double\"}},\"required\":[\"startDate\",\"endDate\",\"smallBatteryCells\",\"largeBatteryCells\",\"numBuildings\",\"numSolarPanels\",\"townHeight\",\"townWidth\"],\"type\":\"object\",\"additionalProperties\":true}},\"info\":{\"title\":\"TSOA\",\"version\":\"1.0.0\",\"description\":\"Build swagger-compliant REST APIs using TypeScript and Node\",\"license\":{\"name\":\"MIT\"}},\"paths\":{\"/biogrid/simulate\":{\"post\":{\"operationId\":\"SimulateNewBiogrid\",\"produces\":[\"application/json\"],\"responses\":{\"200\":{\"description\":\"\",\"schema\":{\"$ref\":\"#/definitions/BiogridSimulationResults\"}}},\"security\":[],\"parameters\":[{\"in\":\"body\",\"name\":\"body\",\"required\":true,\"schema\":{\"$ref\":\"#/definitions/NewBiogridOpts\"}}]}}},\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"securityDefinitions\":{}}");
