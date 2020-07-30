@@ -142,7 +142,7 @@ exports.default = {
         },
     },
     simulation: {
-        NUMBER_OF_SIM_CYCLES: 10,
+        NUMBER_OF_SIM_CYCLES: 23,
     },
     get errorMap() {
         return {
@@ -310,7 +310,7 @@ exports.SMALL_BATTERY = {
  * New large batteries have a capacity smaller than the maximum implemented as default start energy
  */
 exports.LARGE_BATTERY = {
-    DEFAULT_START_ENERGY: 600,
+    DEFAULT_START_ENERGY: 30,
     MAX_CAPACITY: 950,
 };
 /**
@@ -843,7 +843,7 @@ class BioBattery {
         };
         return grid_simulator_1.validate(batteryValidator);
     }
-    getEnergyInJoules() {
+    getEnergyInKilowattHour() {
         return this.energyInJoules;
     }
     getMaxCapacity() {
@@ -1313,7 +1313,7 @@ class BioBrain {
         // Assuming the large battery is not fully charged
         largeBatteries = largeBatteries.filter((battery) => !battery.isFull());
         // Filter the solar panels and remove the ones with the minimum energy or empty
-        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels);
+        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels, date);
         // Create an array of the possible energy givers
         const allEnergyProviders = [...solarPanelsFiltered];
         return await this.determineSupplyingPath(largeBatteries, allEnergyProviders, shortestDistances, date);
@@ -1334,7 +1334,7 @@ class BioBrain {
         // Filter the large batteries and remove the ones which do not have power in them
         largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
         // Filter the solar panels and remove the ones with the minimum energy or empty
-        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels);
+        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels, date);
         // Create an array of the possible energy givers
         const allEnergyProviders = [...solarPanelsFiltered, ...largeBatteries];
         return await this.determineSupplyingPath(smallBatteries, allEnergyProviders, shortestDistances, date);
@@ -1354,14 +1354,14 @@ class BioBrain {
         // Assuming that the houses asking for power will not have power in them.
         // Do not consider building with full power capacity
         buildings = buildings.filter((building) => {
-            return building.getEnergyInJoules() === building.getMinCapacity();
+            return building.getEnergyInKilowattHour() === building.getMinCapacity();
         });
         // Filter the batteries and removes the ones which do not have power in them
         // Do not include batteries which are empty
         smallBatteries = smallBatteries.filter((battery) => !battery.isEmpty());
         largeBatteries = largeBatteries.filter((battery) => !battery.isEmpty());
         // Filter the solar panels and remove the ones with the minimum energy or empty
-        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels);
+        const solarPanelsFiltered = await this.filterSolarPanelsByEnergyAmount(solarPanels, date);
         // Create an array of the possible energy givers
         const allEnergyProviders = [
             ...smallBatteries,
@@ -1392,7 +1392,8 @@ class BioBrain {
             // get the energy which is being requested.
             // TODO: advancement For now implement all or nothing. If battery doesn't have all the energy required, ignore it
             // @see https://github.com/googleinterns/step141-2020/issues/54
-            const energyReq = recievingAgent.getMaxCapacity() - recievingAgent.getEnergyInJoules();
+            const energyReq = recievingAgent.getMaxCapacity() -
+                recievingAgent.getEnergyInKilowattHour();
             let powerSupplied = 0;
             // Get the voltage to be received
             const voltageReq = config.calculateVoltageFromPower(energyReq, recievingAgent.gridItemResistance);
@@ -1419,10 +1420,10 @@ class BioBrain {
                     // Get the total energy which can be supplied by the supplying agent
                     let energyInSupplier;
                     if (supplyingAgents[index].gridItemName.includes(config_1.GRID_ITEM_NAMES.SOLAR_PANEL)) {
-                        energyInSupplier = await supplyingAgents[index].getEnergyInJoules(date);
+                        energyInSupplier = await supplyingAgents[index].getEnergyInKilowattHour(date);
                     }
                     else {
-                        energyInSupplier = await Promise.resolve(supplyingAgents[index].getEnergyInJoules());
+                        energyInSupplier = await Promise.resolve(supplyingAgents[index].getEnergyInKilowattHour());
                     }
                     if (energyInSupplier >= energyProvided) {
                         shortestDistance = newShortestDistance;
@@ -1490,11 +1491,11 @@ class BioBrain {
         }
         return gridItemResistance;
     }
-    async filterSolarPanelsByEnergyAmount(solarPanels) {
+    async filterSolarPanelsByEnergyAmount(solarPanels, date) {
         const solarPanelsFiltered = [];
         for (let i = 0; i < solarPanels.length; i++) {
             const solarPanel = solarPanels[i];
-            if (!(await solarPanel.isEmpty())) {
+            if (!(await solarPanel.isEmpty(date))) {
                 solarPanelsFiltered.push(solarPanel);
             }
         }
@@ -1570,11 +1571,11 @@ class SolarPanel extends bioenergy_source_1.EnergySource {
      * This method returns the current power that can be generated by
      * the solar panel at that given time
      */
-    async getEnergyInJoules(date) {
-        return await this.getPowerAmount(this.date || date);
+    async getEnergyInKilowattHour(date) {
+        return await this.getPowerAmount(date || this.date);
     }
-    async isEmpty() {
-        return (await this.getEnergyInJoules()) === 0;
+    async isEmpty(date) {
+        return (await this.getEnergyInKilowattHour(date)) === 0;
     }
     cloudCoverageToKiloWattsPerSquareMeter(cloudCoverage) {
         // CalculationDerived from https://scool.larc.nasa.gov/lesson_plans/CloudCoverSolarRadiation.pdf
@@ -1850,7 +1851,7 @@ class Biogrid {
             const supplyingGridItem = this.state.getGridItem(allSupplyingPaths[supplyPath]);
             const typeOldGridItem = this.getGridItemType(oldGridItem);
             const energyUser = oldGridItem;
-            const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
+            const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInKilowattHour();
             const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
             if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.ENERGY_USER) {
                 if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY ||
@@ -2340,7 +2341,7 @@ class Building {
     setBuildingId(Id) {
         this.buildingId = Id;
     }
-    getEnergyInJoules() {
+    getEnergyInKilowattHour() {
         return this.energyKilowatt;
     }
     decreaseEnergyAccordingToTimeOfDay(date) {
