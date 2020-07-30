@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -98,7 +98,7 @@ module.exports = require("tslib");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(45), exports);
+tslib_1.__exportStar(__webpack_require__(8), exports);
 tslib_1.__exportStar(__webpack_require__(46), exports);
 
 
@@ -109,7 +109,7 @@ tslib_1.__exportStar(__webpack_require__(46), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const environment_1 = __webpack_require__(16);
+const environment_1 = __webpack_require__(17);
 exports.default = {
     environment: environment_1.environment.production ? 'production' : 'development',
     port: environment_1.environment.port || parseInt(process.env.PORT || '3000'),
@@ -162,7 +162,7 @@ exports.default = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(22), exports);
+tslib_1.__exportStar(__webpack_require__(23), exports);
 tslib_1.__exportStar(__webpack_require__(47), exports);
 tslib_1.__exportStar(__webpack_require__(49), exports);
 tslib_1.__exportStar(__webpack_require__(56), exports);
@@ -181,17 +181,17 @@ tslib_1.__exportStar(__webpack_require__(1), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(24), exports);
-tslib_1.__exportStar(__webpack_require__(26), exports);
-tslib_1.__exportStar(__webpack_require__(28), exports);
-tslib_1.__exportStar(__webpack_require__(30), exports);
-tslib_1.__exportStar(__webpack_require__(32), exports);
-tslib_1.__exportStar(__webpack_require__(34), exports);
-tslib_1.__exportStar(__webpack_require__(36), exports);
+tslib_1.__exportStar(__webpack_require__(25), exports);
+tslib_1.__exportStar(__webpack_require__(27), exports);
+tslib_1.__exportStar(__webpack_require__(29), exports);
+tslib_1.__exportStar(__webpack_require__(31), exports);
+tslib_1.__exportStar(__webpack_require__(33), exports);
+tslib_1.__exportStar(__webpack_require__(35), exports);
 tslib_1.__exportStar(__webpack_require__(37), exports);
-tslib_1.__exportStar(__webpack_require__(39), exports);
-tslib_1.__exportStar(__webpack_require__(41), exports);
-tslib_1.__exportStar(__webpack_require__(43), exports);
+tslib_1.__exportStar(__webpack_require__(38), exports);
+tslib_1.__exportStar(__webpack_require__(40), exports);
+tslib_1.__exportStar(__webpack_require__(42), exports);
+tslib_1.__exportStar(__webpack_require__(44), exports);
 
 
 /***/ }),
@@ -203,7 +203,7 @@ tslib_1.__exportStar(__webpack_require__(43), exports);
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
 const constants_1 = tslib_1.__importDefault(__webpack_require__(2));
-const logger = tslib_1.__importStar(__webpack_require__(18));
+const logger = tslib_1.__importStar(__webpack_require__(19));
 const date = new Date();
 const fileName = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}.log`;
 logger.configure({
@@ -261,7 +261,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
 "use strict";
 const tsoa_1 = __webpack_require__(6);
-const services_1 = __webpack_require__(20);
+const services_1 = __webpack_require__(21);
 let BiogridController = class BiogridController extends tsoa_1.Controller {
     constructor() {
         super();
@@ -287,27 +287,144 @@ exports.BiogridController = BiogridController;
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
-
-module.exports = require("graphlib");
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(10);
-
-
-/***/ }),
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Server_1 = __webpack_require__(11);
-const server = new Server_1.Server();
-server.listen();
+/**
+ * These values are for a small battery which store a maximum 48-volts 6.5kWh
+ * and supply upto 3 houses per hour depending on the charge
+ * These small batteries are standalone batteries which support the system that relies on solar
+ * @see https://www.altenergymag.com/article/2018/04/lead-acid-batteries-for-solar-storage/28297/
+ * New batteries have a capacity smaller than the maximum as default start energy
+ */
+exports.SMALL_BATTERY = {
+    DEFAULT_START_ENERGY: 4.5,
+    MAX_CAPACITY: 6.5,
+};
+/**
+ * The values are for large batteries which store a maximum of 950 kWh
+ * which is approximately equal the amount of power for a building in a month
+ * @see https://www.altenergymag.com/article/2018/03/california-pilots-a-new-approach-to-balancing-with-li-ion-energy-storage/28204/
+ * New large batteries have a capacity smaller than the maximum implemented as default start energy
+ */
+exports.LARGE_BATTERY = {
+    DEFAULT_START_ENERGY: 600,
+    MAX_CAPACITY: 950,
+};
+/**
+ * Each day a solar panel is roughly charged with electricity
+ * for 4hours at a rate of 250 watts ~ 1000watts-hours
+ * Solar panels have a range which they can produce
+ * These solar panels will have a minimum 240 watts-hour when the sunlight is not enough
+ */
+exports.SOLAR_PANEL = {
+    AREA: 10,
+    DEFAULT_INITIAL_ENERGY: 250,
+    KILOLUX_TO_KILOWATT_PER_SQUARE_METER: 0.0079,
+    MIN_CAPACITY: 240,
+    CLEAR_SKY_POWER_WATTS: 990,
+    CLOUD_COVERAGE_SCALING_CONSTANT: 0.75,
+};
+var GRID_ITEM_NAMES;
+(function (GRID_ITEM_NAMES) {
+    GRID_ITEM_NAMES["GRID"] = "grid";
+    GRID_ITEM_NAMES["ENERGY_USER"] = "energy_user";
+    GRID_ITEM_NAMES["LARGE_BATTERY"] = "large_battery";
+    GRID_ITEM_NAMES["SMALL_BATTERY"] = "small_battery";
+    GRID_ITEM_NAMES["SOLAR_PANEL"] = "solar_panel";
+})(GRID_ITEM_NAMES = exports.GRID_ITEM_NAMES || (exports.GRID_ITEM_NAMES = {}));
+exports.GRID_DISTANCES = {
+    // The discrete unit of distance for laying items apart, both vertically and horizontally
+    // So, every item is 1 * INCREMENTS_KM, 2 * INCREMENTS_KM, 3 * INCREMENTS_KM, etc... km apart on the x and y plane
+    INCREMENTS_KM: 0.5,
+};
+/**
+ * Resistance of the differents components used in the grid
+ * For transportation of power, wire 16 of awg is used for transmission lines
+ * @see https://www.cs.rochester.edu/users/faculty/nelson/courses/csc_robocon/robot_manual/wiring.html#:~:text=Gauges%20of%20AWG%2016%20and,0%2C%2000%2C%20or%20larger.
+ * The wires have a constant resistance per length
+ * @see https://en.wikipedia.org/wiki/American_wire_gauge#Tables_of_AWG_wire_sizes for these values
+ * The resistance is measured in ohms (Ω) unless specified otherwise
+ * Buildings use majorly awg wire 13
+ * @see https://homeguides.sfgate.com/estimate-amount-wire-needed-rewire-average-home-105819.html
+ * Average house requires 7.25 rolls of a 50ft-roll
+ * Batteries have inter resistance of about 0.7 - 1.2 Ω. In here, we are considering the average of these values
+ * @see http://newport.eecs.uci.edu/~chou/pdf/chou-islped04-loadmatch.pdf
+ * For small batteries we are considering the @insert value // TODO insert value
+ * Solar panels have an average resistance of 3.617
+ * @see http://waterheatertimer.org/Resistance-and-solar-panels.html
+ */
+exports.RESISTANCE = {
+    BUILDING: 0.726,
+    // TODO get the right value for the resistance of the grid
+    GRID: 0.2,
+    // Average resistance
+    LARGE_BATTERY: 0.95,
+    // Represents the resistances of awg wire 16
+    RESISTANCE_16: 13.17,
+    // TODO insert the correct resistance for the small batteries used
+    SMALL_BATTERY: 0.4,
+    // TODO insert the correct resistance for the solar panels used
+    SOLAR_PANEL: 3.617,
+};
+/**
+ * A building uses approximately 1000 KWh (kilo watts hour) per month,
+ * which is approximately 32KWh per day and 1.3KWh per hour
+ * @see https://homeprofessionals.org/solar/average-kwh-usage-for-a-2000-sq-ft-home/#:~:text=The%20average%202%2C000%20sq.,customer%20in%20a%20residential%20unit.
+ */
+exports.BUILDING = {
+    DEFAULT_INITIAL_ENERGY: 1.3,
+    MAX_CAPACITY: 10,
+    MIN_CAPACITY: 0,
+    /**
+     * Source is from Research Gate
+     * @see https://www.researchgate.net/publication/326358349/figure/fig2/AS:647731865477122@1531442719619/Average-daily-energy-consumption-during-the-weekdays-and-the-variation-throughout-the.png
+     */
+    ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY: {
+        '0': 8,
+        '1': 6,
+        '2': 4.25,
+        '3': 4,
+        '4': 4.25,
+        '5': 4,
+        '6': 5,
+        '7': 6.2,
+        '8': 5,
+        '9': 5,
+        '10': 5,
+        '11': 4.75,
+        '12': 4.75,
+        '13': 4.5,
+        '14': 4.75,
+        '15': 5,
+        '16': 5.5,
+        '17': 6,
+        '18': 7,
+        '19': 10,
+        '20': 9.5,
+        '21': 9,
+        '22': 11,
+        '23': 11,
+    }
+};
+exports.TIME = {
+    DISCRETE_UNIT_HOURS: 1,
+};
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+module.exports = require("graphlib");
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(11);
 
 
 /***/ }),
@@ -317,14 +434,26 @@ server.listen();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const Server_1 = __webpack_require__(12);
+const server = new Server_1.Server();
+server.listen();
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-const express_1 = tslib_1.__importDefault(__webpack_require__(12));
-const swaggerUi = tslib_1.__importStar(__webpack_require__(13));
-const bodyParser = tslib_1.__importStar(__webpack_require__(14));
-const morgan_1 = tslib_1.__importDefault(__webpack_require__(15));
+const express_1 = tslib_1.__importDefault(__webpack_require__(13));
+const swaggerUi = tslib_1.__importStar(__webpack_require__(14));
+const bodyParser = tslib_1.__importStar(__webpack_require__(15));
+const morgan_1 = tslib_1.__importDefault(__webpack_require__(16));
 const constants_1 = tslib_1.__importDefault(__webpack_require__(2));
-const ErrorHandler_1 = __webpack_require__(17);
-const routes_1 = __webpack_require__(19);
+const ErrorHandler_1 = __webpack_require__(18);
+const routes_1 = __webpack_require__(20);
 const Logger_1 = __webpack_require__(5);
 __webpack_require__(66);
 class Server {
@@ -372,31 +501,31 @@ exports.Server = Server;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("express");
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("swagger-ui-express");
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("morgan");
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -410,7 +539,7 @@ exports.environment = {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -441,13 +570,13 @@ exports.ErrorHandler = ErrorHandler;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston");
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -573,18 +702,18 @@ exports.RegisterRoutes = RegisterRoutes;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(21), exports);
+tslib_1.__exportStar(__webpack_require__(22), exports);
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -644,18 +773,18 @@ exports.simulateNewBiogrid = simulateNewBiogrid;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(23), exports);
+tslib_1.__exportStar(__webpack_require__(24), exports);
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -731,23 +860,14 @@ exports.BioBattery = BioBattery;
 
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(25), exports);
-
-
-/***/ }),
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(26), exports);
 
 
 /***/ }),
@@ -757,8 +877,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(27), exports);
 
 
 /***/ }),
@@ -768,6 +886,8 @@ tslib_1.__exportStar(__webpack_require__(27), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(28), exports);
 
 
 /***/ }),
@@ -777,8 +897,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(29), exports);
 
 
 /***/ }),
@@ -788,6 +906,8 @@ tslib_1.__exportStar(__webpack_require__(29), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(30), exports);
 
 
 /***/ }),
@@ -797,8 +917,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(31), exports);
 
 
 /***/ }),
@@ -808,6 +926,8 @@ tslib_1.__exportStar(__webpack_require__(31), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(32), exports);
 
 
 /***/ }),
@@ -817,8 +937,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(33), exports);
 
 
 /***/ }),
@@ -828,6 +946,8 @@ tslib_1.__exportStar(__webpack_require__(33), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(34), exports);
 
 
 /***/ }),
@@ -837,8 +957,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(35), exports);
 
 
 /***/ }),
@@ -848,6 +966,8 @@ tslib_1.__exportStar(__webpack_require__(35), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(36), exports);
 
 
 /***/ }),
@@ -866,8 +986,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(38), exports);
 
 
 /***/ }),
@@ -877,6 +995,8 @@ tslib_1.__exportStar(__webpack_require__(38), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(39), exports);
 
 
 /***/ }),
@@ -886,8 +1006,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(40), exports);
 
 
 /***/ }),
@@ -897,6 +1015,8 @@ tslib_1.__exportStar(__webpack_require__(40), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(41), exports);
 
 
 /***/ }),
@@ -906,8 +1026,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(42), exports);
 
 
 /***/ }),
@@ -917,6 +1035,8 @@ tslib_1.__exportStar(__webpack_require__(42), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(43), exports);
 
 
 /***/ }),
@@ -926,12 +1046,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(44), exports);
 
 
 /***/ }),
 /* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(45), exports);
+
+
+/***/ }),
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -950,130 +1079,6 @@ function validate(validatableInput) {
     return isValid && validatableInput.isPositive;
 }
 exports.validate = validate;
-
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-/**
- * These values are for a small battery which store a maximum 48-volts 6.5kWh
- * and supply upto 3 houses per hour depending on the charge
- * These small batteries are standalone batteries which support the system that relies on solar
- * @see https://www.altenergymag.com/article/2018/04/lead-acid-batteries-for-solar-storage/28297/
- * New batteries have a capacity smaller than the maximum as default start energy
- */
-exports.SMALL_BATTERY = {
-    DEFAULT_START_ENERGY: 4.5,
-    MAX_CAPACITY: 6.5,
-};
-/**
- * The values are for large batteries which store a maximum of 950 kWh
- * which is approximately equal the amount of power for a building in a month
- * @see https://www.altenergymag.com/article/2018/03/california-pilots-a-new-approach-to-balancing-with-li-ion-energy-storage/28204/
- * New large batteries have a capacity smaller than the maximum implemented as default start energy
- */
-exports.LARGE_BATTERY = {
-    DEFAULT_START_ENERGY: 600,
-    MAX_CAPACITY: 950,
-};
-/**
- * Each day a solar panel is roughly charged with electricity
- * for 4hours at a rate of 250 watts ~ 1000watts-hours
- * Solar panels have a range which they can produce
- * These solar panels will have a minimum 240 watts-hour when the sunlight is not enough
- */
-exports.SOLAR_PANEL = {
-    AREA: 10,
-    DEFAULT_INITIAL_ENERGY: 250,
-    KILOLUX_TO_KILOWATT_PER_SQUARE_METER: 0.0079,
-    MIN_CAPACITY: 240,
-    CLEAR_SKY_POWER_WATTS: 990,
-    CLOUD_COVERAGE_SCALING_CONSTANT: 0.75,
-};
-var GRID_ITEM_NAMES;
-(function (GRID_ITEM_NAMES) {
-    GRID_ITEM_NAMES["GRID"] = "grid";
-    GRID_ITEM_NAMES["ENERGY_USER"] = "energy_user";
-    GRID_ITEM_NAMES["LARGE_BATTERY"] = "large_battery";
-    GRID_ITEM_NAMES["SMALL_BATTERY"] = "small_battery";
-    GRID_ITEM_NAMES["SOLAR_PANEL"] = "solar_panel";
-})(GRID_ITEM_NAMES = exports.GRID_ITEM_NAMES || (exports.GRID_ITEM_NAMES = {}));
-/**
- * Resistance of the differents components used in the grid
- * For transportation of power, wire 16 of awg is used for transmission lines
- * @see https://www.cs.rochester.edu/users/faculty/nelson/courses/csc_robocon/robot_manual/wiring.html#:~:text=Gauges%20of%20AWG%2016%20and,0%2C%2000%2C%20or%20larger.
- * The wires have a constant resistance per length
- * @see https://en.wikipedia.org/wiki/American_wire_gauge#Tables_of_AWG_wire_sizes for these values
- * The resistance is measured in ohms (Ω) unless specified otherwise
- * Buildings use majorly awg wire 13
- * @see https://homeguides.sfgate.com/estimate-amount-wire-needed-rewire-average-home-105819.html
- * Average house requires 7.25 rolls of a 50ft-roll
- * Batteries have inter resistance of about 0.7 - 1.2 Ω. In here, we are considering the average of these values
- * @see http://newport.eecs.uci.edu/~chou/pdf/chou-islped04-loadmatch.pdf
- * For small batteries we are considering the @insert value // TODO insert value
- * Solar panels have an average resistance of 3.617
- * @see http://waterheatertimer.org/Resistance-and-solar-panels.html
- */
-exports.RESISTANCE = {
-    BUILDING: 0.726,
-    // TODO get the right value for the resistance of the grid
-    GRID: 0.2,
-    // Average resistance
-    LARGE_BATTERY: 0.95,
-    // Represents the resistances of awg wire 16
-    RESISTANCE_16: 13.17,
-    // TODO insert the correct resistance for the small batteries used
-    SMALL_BATTERY: 0.4,
-    // TODO insert the correct resistance for the solar panels used
-    SOLAR_PANEL: 3.617,
-};
-/**
- * A building uses approximately 1000 KWh (kilo watts hour) per month,
- * which is approximately 32KWh per day and 1.3KWh per hour
- * @see https://homeprofessionals.org/solar/average-kwh-usage-for-a-2000-sq-ft-home/#:~:text=The%20average%202%2C000%20sq.,customer%20in%20a%20residential%20unit.
- */
-exports.BUILDING = {
-    DEFAULT_INITIAL_ENERGY: 1.3,
-    MAX_CAPACITY: 10,
-    MIN_CAPACITY: 0,
-    /**
-     * Source is from Research Gate
-     * @see https://www.researchgate.net/publication/326358349/figure/fig2/AS:647731865477122@1531442719619/Average-daily-energy-consumption-during-the-weekdays-and-the-variation-throughout-the.png
-     */
-    ENERGY_USAGE_KILOWATT_BY_TIME_OF_DAY: {
-        '0': 8,
-        '1': 6,
-        '2': 4.25,
-        '3': 4,
-        '4': 4.25,
-        '5': 4,
-        '6': 5,
-        '7': 6.2,
-        '8': 5,
-        '9': 5,
-        '10': 5,
-        '11': 4.75,
-        '12': 4.75,
-        '13': 4.5,
-        '14': 4.75,
-        '15': 5,
-        '16': 5.5,
-        '17': 6,
-        '18': 7,
-        '19': 10,
-        '20': 9.5,
-        '21': 9,
-        '22': 11,
-        '23': 11,
-    }
-};
-exports.TIME = {
-    DISCRETE_UNIT_HOURS: 1,
-};
 
 
 /***/ }),
@@ -1216,7 +1221,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
 const biogrid_simulator_1 = __webpack_require__(3);
 const config = tslib_1.__importStar(__webpack_require__(1));
-const graphlib_1 = __webpack_require__(8);
+const graphlib_1 = __webpack_require__(9);
 const config_1 = __webpack_require__(1);
 // We can only have one BioBrain per grid
 class BioBrain {
@@ -1738,19 +1743,23 @@ tslib_1.__exportStar(__webpack_require__(57), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = __webpack_require__(1);
+const tslib_1 = __webpack_require__(0);
+const bioconstants = tslib_1.__importStar(__webpack_require__(8));
 const biogrid_simulator_1 = __webpack_require__(3);
 class Biogrid {
     constructor(town, opts) {
         this.town = town;
+        // A dictionary with the position as its key
+        // Used to keep track of whether an item is already placed in a position
+        this.itemInPosition = {};
         const todayMidnight = new Date();
         todayMidnight.setHours(0);
         this.startDate = opts.startDate || todayMidnight;
         // Batteries
         const smallBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSmallBatteryCells);
         const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
-        this.smallBatteries = this.createBatteries(smallBatteryPositions, config_1.GRID_ITEM_NAMES.SMALL_BATTERY);
-        this.largeBatteries = this.createBatteries(largeBatteryPositions, config_1.GRID_ITEM_NAMES.LARGE_BATTERY);
+        this.smallBatteries = this.createBatteries(smallBatteryPositions, bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY);
+        this.largeBatteries = this.createBatteries(largeBatteryPositions, bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY);
         // Energy Source
         // TODO implement the solar panels
         const solarPanelPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSolarPanels);
@@ -1780,15 +1789,15 @@ class Biogrid {
         return this.state.getJsonGraph();
     }
     createBatteries(positions, gridItemName) {
-        const batteryResistance = gridItemName === config_1.GRID_ITEM_NAMES.LARGE_BATTERY
-            ? config_1.RESISTANCE.LARGE_BATTERY
-            : config_1.RESISTANCE.SMALL_BATTERY;
-        const maxCapacity = gridItemName === config_1.GRID_ITEM_NAMES.LARGE_BATTERY
-            ? config_1.LARGE_BATTERY.MAX_CAPACITY
-            : config_1.SMALL_BATTERY.MAX_CAPACITY;
-        const initEnergy = gridItemName === config_1.GRID_ITEM_NAMES.LARGE_BATTERY
-            ? config_1.LARGE_BATTERY.DEFAULT_START_ENERGY
-            : config_1.SMALL_BATTERY.DEFAULT_START_ENERGY;
+        const batteryResistance = gridItemName === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY
+            ? bioconstants.RESISTANCE.LARGE_BATTERY
+            : bioconstants.RESISTANCE.SMALL_BATTERY;
+        const maxCapacity = gridItemName === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY
+            ? bioconstants.LARGE_BATTERY.MAX_CAPACITY
+            : bioconstants.SMALL_BATTERY.MAX_CAPACITY;
+        const initEnergy = gridItemName === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY
+            ? bioconstants.LARGE_BATTERY.DEFAULT_START_ENERGY
+            : bioconstants.SMALL_BATTERY.DEFAULT_START_ENERGY;
         return positions.map((position, index) => new biogrid_simulator_1.BioBattery({
             x: position.x,
             y: position.y,
@@ -1808,8 +1817,8 @@ class Biogrid {
             x: position.x,
             y: position.y,
             efficiency: 0.75,
-            areaSquareMeters: config_1.SOLAR_PANEL.AREA,
-            gridItemName: `${config_1.GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`,
+            areaSquareMeters: bioconstants.SOLAR_PANEL.AREA,
+            gridItemName: `${bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL}-${index}`,
             date: this.startDate,
         }));
     }
@@ -1843,14 +1852,14 @@ class Biogrid {
             const energyUser = oldGridItem;
             const energyUserReq = energyUser.getMaxCapacity() - energyUser.getEnergyInJoules();
             const typeSupplyingGridItem = this.getGridItemType(supplyingGridItem);
-            if (typeOldGridItem === config_1.GRID_ITEM_NAMES.ENERGY_USER) {
-                if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.LARGE_BATTERY ||
-                    typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.SMALL_BATTERY) {
+            if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.ENERGY_USER) {
+                if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY ||
+                    typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY) {
                     const battery = supplyingGridItem;
                     battery.supplyPower(energyUserReq);
                     clonedGraph.setNode(battery.gridItemName, battery);
                 }
-                else if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.SOLAR_PANEL) {
+                else if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL) {
                     const solarpanel = supplyingGridItem;
                     solarpanel.supplyPower(energyUserReq);
                     clonedGraph.setNode(solarpanel.gridItemName, solarpanel);
@@ -1861,13 +1870,13 @@ class Biogrid {
                 energyUser.increaseEnergy(energyUserReq);
                 clonedGraph.setNode(energyUser.gridItemName, energyUser);
             }
-            else if (typeOldGridItem === config_1.GRID_ITEM_NAMES.SMALL_BATTERY) {
-                if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.LARGE_BATTERY) {
+            else if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY) {
+                if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY) {
                     const battery = supplyingGridItem;
                     battery.supplyPower(energyUserReq);
                     clonedGraph.setNode(battery.gridItemName, battery);
                 }
-                else if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.SOLAR_PANEL) {
+                else if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL) {
                     const solarpanel = supplyingGridItem;
                     solarpanel.supplyPower(energyUserReq);
                     clonedGraph.setNode(solarpanel.gridItemName, solarpanel);
@@ -1878,8 +1887,8 @@ class Biogrid {
                 energyUser.startCharging(energyUserReq);
                 clonedGraph.setNode(energyUser.gridItemName, energyUser);
             }
-            else if (typeOldGridItem === config_1.GRID_ITEM_NAMES.LARGE_BATTERY) {
-                if (typeSupplyingGridItem === config_1.GRID_ITEM_NAMES.SOLAR_PANEL) {
+            else if (typeOldGridItem === bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY) {
+                if (typeSupplyingGridItem === bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL) {
                     const solarpanel = supplyingGridItem;
                     solarpanel.supplyPower(energyUserReq);
                 }
@@ -1893,7 +1902,7 @@ class Biogrid {
                 v: supplyingGridItem.gridItemName,
                 w: energyUser.gridItemName,
                 // convert kilowatthours into kilowatts
-                power: energyUserReq / config_1.TIME.DISCRETE_UNIT_HOURS,
+                power: energyUserReq / bioconstants.TIME.DISCRETE_UNIT_HOURS,
             });
         }
         this.state.setnewStateGraph(clonedGraph);
@@ -1903,19 +1912,19 @@ class Biogrid {
         return this.state;
     }
     getGridItemType(gridItem) {
-        if (gridItem.gridItemName.includes(config_1.GRID_ITEM_NAMES.ENERGY_USER)) {
-            return config_1.GRID_ITEM_NAMES.ENERGY_USER;
+        if (gridItem.gridItemName.includes(bioconstants.GRID_ITEM_NAMES.ENERGY_USER)) {
+            return bioconstants.GRID_ITEM_NAMES.ENERGY_USER;
         }
-        else if (gridItem.gridItemName.includes(config_1.GRID_ITEM_NAMES.SMALL_BATTERY)) {
-            return config_1.GRID_ITEM_NAMES.SMALL_BATTERY;
+        else if (gridItem.gridItemName.includes(bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY)) {
+            return bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY;
         }
-        else if (gridItem.gridItemName.includes(config_1.GRID_ITEM_NAMES.LARGE_BATTERY)) {
-            return config_1.GRID_ITEM_NAMES.LARGE_BATTERY;
+        else if (gridItem.gridItemName.includes(bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY)) {
+            return bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY;
         }
-        else if (gridItem.gridItemName.includes(config_1.GRID_ITEM_NAMES.SOLAR_PANEL)) {
-            return config_1.GRID_ITEM_NAMES.SOLAR_PANEL;
+        else if (gridItem.gridItemName.includes(bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL)) {
+            return bioconstants.GRID_ITEM_NAMES.SOLAR_PANEL;
         }
-        return config_1.GRID_ITEM_NAMES.GRID;
+        return bioconstants.GRID_ITEM_NAMES.GRID;
     }
     /**
      * A simplified algorithm to (mostly) evenly space out batteries throughout the square town
@@ -1927,12 +1936,81 @@ class Biogrid {
         const rows = Math.ceil(numberOfGridItems / cols);
         const positions = [];
         for (let i = 0; i < numberOfGridItems; i++) {
-            positions.push({
-                x: (((i % cols) + 0.5) / cols) * townSize.width,
-                y: ((Math.floor(i / cols) + 0.5) / rows) * townSize.height,
-            });
+            const newPositionUnverified = {
+                x: this.roundToGridDistance((((i % cols) + 0.5) / cols) * townSize.width),
+                y: this.roundToGridDistance(((Math.floor(i / cols) + 0.5) / rows) * townSize.height),
+            };
+            const newPosition = this.findNearestUnoccupiedPosition(newPositionUnverified, townSize);
+            positions.push(newPosition);
+            this.itemInPosition[this.formatItemPosition(newPosition)] = true;
         }
         return positions;
+    }
+    /**
+     * Find the nearest unoccupied position to {@code pos} by looking looking in a spiral with pos at its center
+     * First the space immediately right of pos is checked, then the one above, then to the left, then below, then two right spaces out, two right up, etc
+     */
+    findNearestUnoccupiedPosition(pos, townSize) {
+        let radius = bioconstants.GRID_DISTANCES.INCREMENTS_KM;
+        let angle = 0;
+        let outOfBoundsCount = 0;
+        let xOffset = 0, yOffset = 0;
+        let newPos = { x: pos.x + xOffset, y: pos.y + yOffset };
+        // If {@code outOfBoundsCount} is greater than 3, then that means the upwards, left, right, and down
+        // Are all out of bounds. Thus there is no where left to place the item
+        while ((this.positionOutOfBounds(newPos, townSize) ||
+            this.positionOccupied(newPos)) &&
+            outOfBoundsCount < 4) {
+            if (this.positionOutOfBounds(newPos, townSize)) {
+                outOfBoundsCount++;
+            }
+            switch (angle) {
+                case 0:
+                    yOffset = 0;
+                    xOffset = radius;
+                    break;
+                case 90:
+                    xOffset = 0;
+                    yOffset = radius;
+                    break;
+                case 180:
+                    xOffset = -1 * radius;
+                    yOffset = 0;
+                    break;
+                case 270:
+                    xOffset = 0;
+                    yOffset = -1 * radius;
+                    break;
+            }
+            newPos = { x: pos.x + xOffset, y: pos.y + yOffset };
+            // Increment the angle by 90 degrees
+            angle = angle + 90;
+            if (angle === 360) {
+                radius += bioconstants.GRID_DISTANCES.INCREMENTS_KM;
+                // Reset the angle
+                angle = 0;
+            }
+        }
+        if (outOfBoundsCount > 3) {
+            throw new Error(`There are too many items on the grid. New items could not be placed with a minimum distance of ${bioconstants.GRID_DISTANCES.INCREMENTS_KM} km apart`);
+        }
+        return newPos;
+    }
+    positionOutOfBounds(pos, townSize) {
+        return pos.x > townSize.width || pos.y > townSize.height;
+    }
+    roundToGridDistance(distance) {
+        return (Math.floor(distance / bioconstants.GRID_DISTANCES.INCREMENTS_KM) *
+            bioconstants.GRID_DISTANCES.INCREMENTS_KM);
+    }
+    positionOccupied(pos) {
+        return this.itemInPosition[this.formatItemPosition(pos)];
+    }
+    /**
+     * Convert an item into a string
+     */
+    formatItemPosition(pos) {
+        return `${pos.x}, ${pos.y}`;
     }
 }
 exports.Biogrid = Biogrid;
@@ -1990,7 +2068,7 @@ tslib_1.__exportStar(__webpack_require__(61), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-const graphlib = tslib_1.__importStar(__webpack_require__(8));
+const graphlib = tslib_1.__importStar(__webpack_require__(9));
 const config_1 = __webpack_require__(1);
 class BiogridState {
     // TODO think about implement it StateGraphVertex[] as an object of key: name -> value: StateGraphVertex
