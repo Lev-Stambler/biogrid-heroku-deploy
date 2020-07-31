@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -99,7 +99,7 @@ module.exports = require("tslib");
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
 tslib_1.__exportStar(__webpack_require__(8), exports);
-tslib_1.__exportStar(__webpack_require__(46), exports);
+tslib_1.__exportStar(__webpack_require__(47), exports);
 
 
 /***/ }),
@@ -109,7 +109,7 @@ tslib_1.__exportStar(__webpack_require__(46), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const environment_1 = __webpack_require__(17);
+const environment_1 = __webpack_require__(18);
 exports.default = {
     environment: environment_1.environment.production ? 'production' : 'development',
     port: environment_1.environment.port || parseInt(process.env.PORT || '3000'),
@@ -142,7 +142,7 @@ exports.default = {
         },
     },
     simulation: {
-        NUMBER_OF_SIM_CYCLES: 23,
+        NUMBER_OF_SIM_HOURS: 24,
     },
     get errorMap() {
         return {
@@ -162,14 +162,14 @@ exports.default = {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(23), exports);
-tslib_1.__exportStar(__webpack_require__(47), exports);
-tslib_1.__exportStar(__webpack_require__(49), exports);
-tslib_1.__exportStar(__webpack_require__(56), exports);
-tslib_1.__exportStar(__webpack_require__(58), exports);
-tslib_1.__exportStar(__webpack_require__(60), exports);
-tslib_1.__exportStar(__webpack_require__(62), exports);
-tslib_1.__exportStar(__webpack_require__(64), exports);
+tslib_1.__exportStar(__webpack_require__(24), exports);
+tslib_1.__exportStar(__webpack_require__(48), exports);
+tslib_1.__exportStar(__webpack_require__(50), exports);
+tslib_1.__exportStar(__webpack_require__(57), exports);
+tslib_1.__exportStar(__webpack_require__(59), exports);
+tslib_1.__exportStar(__webpack_require__(61), exports);
+tslib_1.__exportStar(__webpack_require__(63), exports);
+tslib_1.__exportStar(__webpack_require__(65), exports);
 tslib_1.__exportStar(__webpack_require__(1), exports);
 
 
@@ -181,17 +181,17 @@ tslib_1.__exportStar(__webpack_require__(1), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(25), exports);
-tslib_1.__exportStar(__webpack_require__(27), exports);
-tslib_1.__exportStar(__webpack_require__(29), exports);
-tslib_1.__exportStar(__webpack_require__(31), exports);
-tslib_1.__exportStar(__webpack_require__(33), exports);
-tslib_1.__exportStar(__webpack_require__(35), exports);
-tslib_1.__exportStar(__webpack_require__(37), exports);
+tslib_1.__exportStar(__webpack_require__(26), exports);
+tslib_1.__exportStar(__webpack_require__(28), exports);
+tslib_1.__exportStar(__webpack_require__(30), exports);
+tslib_1.__exportStar(__webpack_require__(32), exports);
+tslib_1.__exportStar(__webpack_require__(34), exports);
+tslib_1.__exportStar(__webpack_require__(36), exports);
 tslib_1.__exportStar(__webpack_require__(38), exports);
-tslib_1.__exportStar(__webpack_require__(40), exports);
-tslib_1.__exportStar(__webpack_require__(42), exports);
-tslib_1.__exportStar(__webpack_require__(44), exports);
+tslib_1.__exportStar(__webpack_require__(39), exports);
+tslib_1.__exportStar(__webpack_require__(41), exports);
+tslib_1.__exportStar(__webpack_require__(43), exports);
+tslib_1.__exportStar(__webpack_require__(45), exports);
 
 
 /***/ }),
@@ -203,7 +203,7 @@ tslib_1.__exportStar(__webpack_require__(44), exports);
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
 const constants_1 = tslib_1.__importDefault(__webpack_require__(2));
-const logger = tslib_1.__importStar(__webpack_require__(19));
+const logger = tslib_1.__importStar(__webpack_require__(20));
 const date = new Date();
 const fileName = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}.log`;
 logger.configure({
@@ -261,7 +261,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
 "use strict";
 const tsoa_1 = __webpack_require__(6);
-const services_1 = __webpack_require__(21);
+const services_1 = __webpack_require__(22);
 let BiogridController = class BiogridController extends tsoa_1.Controller {
     constructor() {
         super();
@@ -376,7 +376,7 @@ exports.RESISTANCE = {
  */
 exports.BUILDING = {
     DEFAULT_INITIAL_ENERGY: 1.3,
-    MAX_CAPACITY: 10,
+    MAX_CAPACITY: 32,
     MIN_CAPACITY: 0,
     /**
      * Source is from Research Gate
@@ -424,19 +424,39 @@ module.exports = require("graphlib");
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(11);
+"use strict";
+
+/**
+ * @summary is a class which defines the grid which is always in the middle of the town
+ * @author Roland Naijuka <rnaijuka@google.com>
+ *
+ * Created at     : 7/31/2020, 11:50:42 AM
+ * Last modified  : 7/29/2020, 11:58:17 AM
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+const config_1 = __webpack_require__(1);
+class MAIN_GRID {
+    constructor(townSize) {
+        this.gridItemName = config_1.GRID_ITEM_NAMES.GRID;
+        this.gridItemResistance = config_1.RESISTANCE.GRID;
+        // Add the grid in the center of the town based on the townSize
+        this.relativePosition = {
+            x: Math.floor(townSize.width / 2),
+            y: Math.floor(townSize.height / 2),
+        };
+    }
+    getRelativePosition() {
+        return this.relativePosition;
+    }
+}
+exports.MAIN_GRID = MAIN_GRID;
 
 
 /***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const Server_1 = __webpack_require__(12);
-const server = new Server_1.Server();
-server.listen();
+module.exports = __webpack_require__(12);
 
 
 /***/ }),
@@ -446,16 +466,28 @@ server.listen();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const Server_1 = __webpack_require__(13);
+const server = new Server_1.Server();
+server.listen();
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-const express_1 = tslib_1.__importDefault(__webpack_require__(13));
-const swaggerUi = tslib_1.__importStar(__webpack_require__(14));
-const bodyParser = tslib_1.__importStar(__webpack_require__(15));
-const morgan_1 = tslib_1.__importDefault(__webpack_require__(16));
+const express_1 = tslib_1.__importDefault(__webpack_require__(14));
+const swaggerUi = tslib_1.__importStar(__webpack_require__(15));
+const bodyParser = tslib_1.__importStar(__webpack_require__(16));
+const morgan_1 = tslib_1.__importDefault(__webpack_require__(17));
 const constants_1 = tslib_1.__importDefault(__webpack_require__(2));
-const ErrorHandler_1 = __webpack_require__(18);
-const routes_1 = __webpack_require__(20);
+const ErrorHandler_1 = __webpack_require__(19);
+const routes_1 = __webpack_require__(21);
 const Logger_1 = __webpack_require__(5);
-__webpack_require__(66);
+__webpack_require__(67);
 class Server {
     constructor() {
         this.app = express_1.default();
@@ -469,7 +501,7 @@ class Server {
         this.serveStaticFiles();
         // Disable linter as require statement is necessary for swagger files
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const swaggerDocument = __webpack_require__(67);
+        const swaggerDocument = __webpack_require__(68);
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
     }
     async listen(port = this.port) {
@@ -501,31 +533,31 @@ exports.Server = Server;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("express");
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("swagger-ui-express");
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("body-parser");
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = require("morgan");
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -539,7 +571,7 @@ exports.environment = {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -570,13 +602,13 @@ exports.ErrorHandler = ErrorHandler;
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston");
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -702,18 +734,18 @@ exports.RegisterRoutes = RegisterRoutes;
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(22), exports);
+tslib_1.__exportStar(__webpack_require__(23), exports);
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -740,7 +772,7 @@ async function simulateNewBiogrid(body) {
             energy: biogrid_simulator_1.BUILDING.DEFAULT_INITIAL_ENERGY,
             x: randomPos.x,
             y: randomPos.y,
-            gridItemName: `${biogrid_simulator_1.GRID_ITEM_NAMES.ENERGY_USER}-${i}`
+            gridItemName: `${biogrid_simulator_1.GRID_ITEM_NAMES.ENERGY_USER}-${i}`,
         }));
     }
     const town = new biogrid_simulator_1.RuralArea(buildings, body.townWidth, body.townHeight);
@@ -751,12 +783,12 @@ async function simulateNewBiogrid(body) {
     });
     const biobrain = biogrid_simulator_1.BioBrain.Instance;
     const initState = biogrid.getSystemState();
-    const statesJson = [biogrid.getJsonGraphDetails()];
+    const statesJson = [];
     const currentDate = body.startDate;
-    for (let i = 0; i < constants_1.default.simulation.NUMBER_OF_SIM_CYCLES; i++) {
-        // Start at midnight, increment hours until NUMBER_OF_SIM_CYCLES reached
+    for (let i = 0; i < constants_1.default.simulation.NUMBER_OF_SIM_HOURS; i++) {
+        // Start at midnight, increment hours until NUMBER_OF_SIM_HOURS reached
         currentDate.setHours(i);
-        biogrid.drainEnergyUsers(currentDate);
+        biogrid.updateEnergyUsage(currentDate);
         const action = await biobrain.computeAction(initState, currentDate);
         biogrid.takeAction(action);
         statesJson.push(biogrid.getJsonGraphDetails());
@@ -773,18 +805,18 @@ exports.simulateNewBiogrid = simulateNewBiogrid;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(24), exports);
+tslib_1.__exportStar(__webpack_require__(25), exports);
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -803,11 +835,11 @@ class BioBattery {
     constructor(batteryParams) {
         this.maxCapacity = config_1.SMALL_BATTERY.MAX_CAPACITY;
         this.relativePosition = { x: batteryParams.x, y: batteryParams.y };
-        if (!this.validateInputs(batteryParams.energyInJoules, batteryParams.maxCapacity)) {
+        if (!this.validateInputs(batteryParams.energyInKiloWattHour, batteryParams.maxCapacity)) {
             // TODO return a tuple of from validate to with the boolean and unpassed validations
-            throw new Error(`Cannot create a battery with values: (${batteryParams.energyInJoules}, ${batteryParams.maxCapacity})`);
+            throw new Error(`Cannot create a battery with values: (${batteryParams.energyInKiloWattHour}, ${batteryParams.maxCapacity})`);
         }
-        this.energyInJoules = batteryParams.energyInJoules;
+        this.energyInKiloWattHour = batteryParams.energyInKiloWattHour;
         if (batteryParams.maxCapacity) {
             this.maxCapacity = batteryParams.maxCapacity;
         }
@@ -818,56 +850,45 @@ class BioBattery {
         return this.relativePosition;
     }
     startCharging(inputPower) {
-        if (this.energyInJoules + inputPower > this.maxCapacity) {
-            this.energyInJoules = this.maxCapacity;
+        if (this.energyInKiloWattHour + inputPower > this.maxCapacity) {
+            this.energyInKiloWattHour = this.maxCapacity;
         }
-        this.energyInJoules += inputPower;
+        this.energyInKiloWattHour += inputPower;
     }
     // TODO implement when you use a formula for charging a battery
     stopCharging() { }
     supplyPower(outputenergy) {
-        if (this.energyInJoules - outputenergy < 0) {
+        if (this.energyInKiloWattHour - outputenergy < 0) {
             //TODO implement the function to notify the request with amount of output left
-            const temp = this.energyInJoules;
-            this.energyInJoules = 0;
+            const temp = this.energyInKiloWattHour;
+            this.energyInKiloWattHour = 0;
             return temp;
         }
-        this.energyInJoules -= outputenergy;
+        this.energyInKiloWattHour -= outputenergy;
         return outputenergy;
     }
-    validateInputs(energyInJoules, maxCapacity = this.maxCapacity) {
+    validateInputs(energyInKiloWattHour, maxCapacity = this.maxCapacity) {
         const batteryValidator = {
-            value: energyInJoules,
+            value: energyInKiloWattHour,
             max: maxCapacity,
-            isPositive: energyInJoules >= 0 && maxCapacity >= 0,
+            isPositive: energyInKiloWattHour >= 0 && maxCapacity >= 0,
         };
         return grid_simulator_1.validate(batteryValidator);
     }
     getEnergyInKilowattHour() {
-        return this.energyInJoules;
+        return this.energyInKiloWattHour;
     }
     getMaxCapacity() {
         return this.maxCapacity;
     }
     isEmpty() {
-        return this.energyInJoules === 0;
+        return this.energyInKiloWattHour === 0;
     }
     isFull() {
-        return this.energyInJoules === this.maxCapacity;
+        return this.energyInKiloWattHour === this.maxCapacity;
     }
 }
 exports.BioBattery = BioBattery;
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(26), exports);
 
 
 /***/ }),
@@ -877,6 +898,8 @@ tslib_1.__exportStar(__webpack_require__(26), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(27), exports);
 
 
 /***/ }),
@@ -886,8 +909,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(28), exports);
 
 
 /***/ }),
@@ -897,6 +918,8 @@ tslib_1.__exportStar(__webpack_require__(28), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(29), exports);
 
 
 /***/ }),
@@ -906,8 +929,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(30), exports);
 
 
 /***/ }),
@@ -917,6 +938,8 @@ tslib_1.__exportStar(__webpack_require__(30), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(31), exports);
 
 
 /***/ }),
@@ -926,8 +949,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(32), exports);
 
 
 /***/ }),
@@ -937,6 +958,8 @@ tslib_1.__exportStar(__webpack_require__(32), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(33), exports);
 
 
 /***/ }),
@@ -946,8 +969,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(34), exports);
 
 
 /***/ }),
@@ -957,6 +978,8 @@ tslib_1.__exportStar(__webpack_require__(34), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(35), exports);
 
 
 /***/ }),
@@ -966,8 +989,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(36), exports);
 
 
 /***/ }),
@@ -977,6 +998,8 @@ tslib_1.__exportStar(__webpack_require__(36), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(37), exports);
 
 
 /***/ }),
@@ -995,8 +1018,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(39), exports);
 
 
 /***/ }),
@@ -1006,6 +1027,8 @@ tslib_1.__exportStar(__webpack_require__(39), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(40), exports);
 
 
 /***/ }),
@@ -1015,8 +1038,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(41), exports);
 
 
 /***/ }),
@@ -1026,6 +1047,8 @@ tslib_1.__exportStar(__webpack_require__(41), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(42), exports);
 
 
 /***/ }),
@@ -1035,8 +1058,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(43), exports);
 
 
 /***/ }),
@@ -1046,6 +1067,8 @@ tslib_1.__exportStar(__webpack_require__(43), exports);
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(44), exports);
 
 
 /***/ }),
@@ -1055,12 +1078,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(45), exports);
 
 
 /***/ }),
 /* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(46), exports);
+
+
+/***/ }),
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1082,7 +1114,7 @@ exports.validate = validate;
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1201,18 +1233,18 @@ exports.calculateEfficiency = calculateEfficiency;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(48), exports);
+tslib_1.__exportStar(__webpack_require__(49), exports);
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1432,7 +1464,7 @@ class BioBrain {
                     }
                 }
             }
-            // In case there is no supplier for that receiver, ignore the reciever
+            // In case there is no supplier for that receiver, ignore the receiver
             // TODO advancement, tell the grid about these cases of receiver asking for more than it can be given
             // @see https://github.com/googleinterns/step141-2020/issues/54
             if (indexOfProvider === -1) {
@@ -1506,25 +1538,25 @@ exports.BioBrain = BioBrain;
 
 
 /***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(50), exports);
-
-
-/***/ }),
 /* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const weather_1 = __webpack_require__(51);
-const bioenergy_source_1 = __webpack_require__(55);
+const tslib_1 = __webpack_require__(0);
+tslib_1.__exportStar(__webpack_require__(51), exports);
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const weather_1 = __webpack_require__(52);
+const bioenergy_source_1 = __webpack_require__(56);
 const grid_simulator_1 = __webpack_require__(4);
 const config_1 = __webpack_require__(1);
 class SolarPanel extends bioenergy_source_1.EnergySource {
@@ -1590,17 +1622,6 @@ exports.SolarPanel = SolarPanel;
 
 
 /***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(52), exports);
-
-
-/***/ }),
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1608,10 +1629,21 @@ tslib_1.__exportStar(__webpack_require__(52), exports);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-const node_fetch_1 = tslib_1.__importDefault(__webpack_require__(53));
+tslib_1.__exportStar(__webpack_require__(53), exports);
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = __webpack_require__(0);
+const node_fetch_1 = tslib_1.__importDefault(__webpack_require__(54));
 // TODO put api keys into their own lib
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const apiKey = __webpack_require__(54);
+const apiKey = __webpack_require__(55);
 class WeatherLib {
     constructor(day, longitude, latitude) {
         this.day = day;
@@ -1674,19 +1706,19 @@ exports.WeatherLib = WeatherLib;
 
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports) {
 
 module.exports = require("node-fetch");
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"weatherapi\":\"2e19a5f6f1134a61831111446202307\"}");
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1727,18 +1759,18 @@ exports.EnergySource = EnergySource;
 
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(57), exports);
+tslib_1.__exportStar(__webpack_require__(58), exports);
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1761,8 +1793,7 @@ class Biogrid {
         const largeBatteryPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfLargeBatteryCells);
         this.smallBatteries = this.createBatteries(smallBatteryPositions, bioconstants.GRID_ITEM_NAMES.SMALL_BATTERY);
         this.largeBatteries = this.createBatteries(largeBatteryPositions, bioconstants.GRID_ITEM_NAMES.LARGE_BATTERY);
-        // Energy Source
-        // TODO implement the solar panels
+        // Enery Source
         const solarPanelPositions = this.createGridItemPositions(town.getTownSize(), opts.numberOfSolarPanels);
         this.solarPanels = this.createSolarPanels(solarPanelPositions);
         this.state = new biogrid_simulator_1.BiogridState(this.createGridItems(), town.getTownSize());
@@ -1804,7 +1835,7 @@ class Biogrid {
             y: position.y,
             gridItemName: `${gridItemName}-${index}`,
             gridItemResistance: batteryResistance,
-            energyInJoules: initEnergy,
+            energyInKiloWattHour: initEnergy,
             maxCapacity,
         }));
     }
@@ -1826,7 +1857,7 @@ class Biogrid {
     /**
      * Drain the energy users according to the time of day
      */
-    drainEnergyUsers(date) {
+    updateEnergyUsage(date) {
         this.town.getEnergyUsers().forEach((energyUser) => {
             energyUser.decreaseEnergyAccordingToTimeOfDay(date);
         });
@@ -1902,7 +1933,7 @@ class Biogrid {
             powerEdges.push({
                 v: supplyingGridItem.gridItemName,
                 w: energyUser.gridItemName,
-                // convert kilowatthours into kilowatts
+                // Convert kilowatthours into kilowatts
                 power: energyUserReq / bioconstants.TIME.DISCRETE_UNIT_HOURS,
             });
         }
@@ -2018,18 +2049,18 @@ exports.Biogrid = Biogrid;
 
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(59), exports);
+tslib_1.__exportStar(__webpack_require__(60), exports);
 
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2051,18 +2082,19 @@ exports.BiogridAction = BiogridAction;
 
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(61), exports);
+tslib_1.__exportStar(__webpack_require__(62), exports);
+tslib_1.__exportStar(__webpack_require__(10), exports);
 
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2071,6 +2103,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
 const graphlib = tslib_1.__importStar(__webpack_require__(9));
 const config_1 = __webpack_require__(1);
+const main_grid_item_1 = __webpack_require__(10);
 class BiogridState {
     // TODO think about implement it StateGraphVertex[] as an object of key: name -> value: StateGraphVertex
     constructor(vertices, townSize) {
@@ -2078,17 +2111,7 @@ class BiogridState {
         // Directed so as to have two edges between A and B, but in opposite directions
         this.graph = new graphlib.Graph({ directed: true });
         // Initialize the graph with a grid which is a gridItem and has position (0, 0) to keep track of where the items are placed on the map
-        const grid = {
-            gridItemName: config_1.GRID_ITEM_NAMES.GRID,
-            gridItemResistance: config_1.RESISTANCE.GRID,
-            // Add the grid in the center of the town based on the townSize
-            getRelativePosition() {
-                return {
-                    x: Math.floor(townSize.width / 2),
-                    y: Math.floor(townSize.height / 2),
-                };
-            }
-        };
+        const grid = new main_grid_item_1.MAIN_GRID(townSize);
         this.graph.setNode(grid.gridItemName, grid);
         // Add all the vertices as nodes/vertices of the graph, with a name for
         // the particular grid item and label which is data for the particular vertex as the GridItem itself
@@ -2127,8 +2150,14 @@ class BiogridState {
     setPowerBetweenNodes(v, w, power) {
         const labelFromV = this.graph.edge(v, config_1.GRID_ITEM_NAMES.GRID);
         const labelToW = this.graph.edge(config_1.GRID_ITEM_NAMES.GRID, w);
-        this.graph.setEdge(v, config_1.GRID_ITEM_NAMES.GRID, { distance: labelFromV.distance, power });
-        this.graph.setEdge(config_1.GRID_ITEM_NAMES.GRID, w, { distance: labelToW.distance, power });
+        this.graph.setEdge(v, config_1.GRID_ITEM_NAMES.GRID, {
+            distance: labelFromV.distance,
+            power,
+        });
+        this.graph.setEdge(config_1.GRID_ITEM_NAMES.GRID, w, {
+            distance: labelToW.distance,
+            power,
+        });
     }
     /**
      * Set all edge power to 0
@@ -2176,7 +2205,7 @@ class BiogridState {
         const labels = this.graph.edge(edge);
         this.graph.setEdge(edge.v, edge.w, {
             distance: labels.distance,
-            power: 0
+            power: 0,
         });
     }
     /**
@@ -2275,18 +2304,18 @@ exports.BiogridState = BiogridState;
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(63), exports);
+tslib_1.__exportStar(__webpack_require__(64), exports);
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2311,7 +2340,7 @@ class Building {
         this.relativePosition = { x: buildingParams.x, y: buildingParams.y };
         this.gridItemName = buildingParams.gridItemName;
         if (this.isPositive(buildingParams.energy)) {
-            this.energyKilowatt = buildingParams.energy;
+            this.energyInKilowattHour = buildingParams.energy;
         }
         else {
             throw new Error("Can't create a building with negative energy!");
@@ -2342,7 +2371,7 @@ class Building {
         this.buildingId = Id;
     }
     getEnergyInKilowattHour() {
-        return this.energyKilowatt;
+        return this.energyInKilowattHour;
     }
     decreaseEnergyAccordingToTimeOfDay(date) {
         const energyUsed = this.getAverageEnergyUsagePerDay(date.getHours());
@@ -2353,7 +2382,7 @@ class Building {
      */
     increaseEnergy(energy) {
         if (this.isPositive(energy)) {
-            this.energyKilowatt += energy;
+            this.energyInKilowattHour += energy;
         }
         else {
             throw new Error("Can't add negative energy!");
@@ -2367,11 +2396,11 @@ class Building {
             throw new Error("Can't use a negative amount of energy!");
         }
         // Building can't have a negative amount of energy in store.
-        if (energy >= this.energyKilowatt) {
-            this.energyKilowatt = 0;
+        if (energy >= this.energyInKilowattHour) {
+            this.energyInKilowattHour = 0;
         }
         else {
-            this.energyKilowatt -= energy;
+            this.energyInKilowattHour -= energy;
         }
     }
     getAverageEnergyUsagePerDay(hourOfDay) {
@@ -2382,18 +2411,18 @@ exports.Building = Building;
 
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = __webpack_require__(0);
-tslib_1.__exportStar(__webpack_require__(65), exports);
+tslib_1.__exportStar(__webpack_require__(66), exports);
 
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2455,7 +2484,7 @@ exports.RuralArea = RuralArea;
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2466,7 +2495,7 @@ tslib_1.__exportStar(__webpack_require__(7), exports);
 
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"basePath\":\"/service\",\"consumes\":[\"application/json\"],\"definitions\":{\"BiogridSimulationResults\":{\"properties\":{\"energyWastedFromSource\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"energyWastedInTransportation\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"timeWithoutEnoughEnergy\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"townSize\":{\"properties\":{\"width\":{\"type\":\"number\",\"format\":\"double\"},\"height\":{\"type\":\"number\",\"format\":\"double\"}},\"required\":[\"height\",\"width\"],\"type\":\"object\"},\"states\":{\"items\":{\"additionalProperties\":true,\"type\":\"object\"},\"type\":\"array\"}},\"required\":[\"townSize\",\"states\"],\"type\":\"object\",\"additionalProperties\":true},\"NewBiogridOpts\":{\"properties\":{\"startDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"endDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"smallBatteryCells\":{\"type\":\"number\",\"format\":\"double\"},\"largeBatteryCells\":{\"type\":\"number\",\"format\":\"double\"},\"numBuildings\":{\"type\":\"number\",\"format\":\"double\"},\"numSolarPanels\":{\"type\":\"number\",\"format\":\"double\"},\"townHeight\":{\"type\":\"number\",\"format\":\"double\"},\"townWidth\":{\"type\":\"number\",\"format\":\"double\"}},\"required\":[\"startDate\",\"endDate\",\"smallBatteryCells\",\"largeBatteryCells\",\"numBuildings\",\"numSolarPanels\",\"townHeight\",\"townWidth\"],\"type\":\"object\",\"additionalProperties\":true}},\"info\":{\"title\":\"TSOA\",\"version\":\"1.0.0\",\"description\":\"Build swagger-compliant REST APIs using TypeScript and Node\",\"license\":{\"name\":\"MIT\"}},\"paths\":{\"/biogrid/simulate\":{\"post\":{\"operationId\":\"SimulateNewBiogrid\",\"produces\":[\"application/json\"],\"responses\":{\"200\":{\"description\":\"\",\"schema\":{\"$ref\":\"#/definitions/BiogridSimulationResults\"}}},\"security\":[],\"parameters\":[{\"in\":\"body\",\"name\":\"body\",\"required\":true,\"schema\":{\"$ref\":\"#/definitions/NewBiogridOpts\"}}]}}},\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"securityDefinitions\":{}}");
