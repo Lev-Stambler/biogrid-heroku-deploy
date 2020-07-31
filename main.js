@@ -638,7 +638,6 @@ const models = {
         "dataType": "refObject",
         "properties": {
             "startDate": { "dataType": "datetime", "required": true },
-            "endDate": { "dataType": "datetime", "required": true },
             "smallBatteryCells": { "dataType": "double", "required": true },
             "largeBatteryCells": { "dataType": "double", "required": true },
             "numBuildings": { "dataType": "double", "required": true },
@@ -780,6 +779,7 @@ async function simulateNewBiogrid(body) {
         numberOfLargeBatteryCells: body.largeBatteryCells,
         numberOfSmallBatteryCells: body.smallBatteryCells,
         numberOfSolarPanels: body.numSolarPanels,
+        startDate: body.startDate,
     });
     const biobrain = biogrid_simulator_1.BioBrain.Instance;
     const initState = biogrid.getSystemState();
@@ -1694,7 +1694,7 @@ class WeatherLib {
         return `${this.formatDate(date)}:${date.getHours()}`;
     }
     formatDate(date) {
-        let d = new Date(date), month = `${(d.getMonth() + 1)}`, day = `${d.getDate()}`, year = d.getFullYear();
+        let d = new Date(date), month = `${d.getMonth() + 1}`, day = `${d.getDate()}`, year = d.getFullYear();
         if (month.length < 2)
             month = `0${month}`;
         if (day.length < 2)
@@ -1992,7 +1992,7 @@ class Biogrid {
         // Are all out of bounds. Thus there is no where left to place the item
         while ((this.positionOutOfBounds(newPos, townSize) ||
             this.positionOccupied(newPos)) &&
-            outOfBoundsCount < 4) {
+            outOfBoundsCount <= 3) {
             if (this.positionOutOfBounds(newPos, townSize)) {
                 outOfBoundsCount++;
             }
@@ -2498,7 +2498,7 @@ tslib_1.__exportStar(__webpack_require__(7), exports);
 /* 68 */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"basePath\":\"/service\",\"consumes\":[\"application/json\"],\"definitions\":{\"BiogridSimulationResults\":{\"properties\":{\"energyWastedFromSource\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"energyWastedInTransportation\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"timeWithoutEnoughEnergy\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"townSize\":{\"properties\":{\"width\":{\"type\":\"number\",\"format\":\"double\"},\"height\":{\"type\":\"number\",\"format\":\"double\"}},\"required\":[\"height\",\"width\"],\"type\":\"object\"},\"states\":{\"items\":{\"additionalProperties\":true,\"type\":\"object\"},\"type\":\"array\"}},\"required\":[\"townSize\",\"states\"],\"type\":\"object\",\"additionalProperties\":true},\"NewBiogridOpts\":{\"properties\":{\"startDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"endDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"smallBatteryCells\":{\"type\":\"number\",\"format\":\"double\"},\"largeBatteryCells\":{\"type\":\"number\",\"format\":\"double\"},\"numBuildings\":{\"type\":\"number\",\"format\":\"double\"},\"numSolarPanels\":{\"type\":\"number\",\"format\":\"double\"},\"townHeight\":{\"type\":\"number\",\"format\":\"double\"},\"townWidth\":{\"type\":\"number\",\"format\":\"double\"}},\"required\":[\"startDate\",\"endDate\",\"smallBatteryCells\",\"largeBatteryCells\",\"numBuildings\",\"numSolarPanels\",\"townHeight\",\"townWidth\"],\"type\":\"object\",\"additionalProperties\":true}},\"info\":{\"title\":\"TSOA\",\"version\":\"1.0.0\",\"description\":\"Build swagger-compliant REST APIs using TypeScript and Node\",\"license\":{\"name\":\"MIT\"}},\"paths\":{\"/biogrid/simulate\":{\"post\":{\"operationId\":\"SimulateNewBiogrid\",\"produces\":[\"application/json\"],\"responses\":{\"200\":{\"description\":\"\",\"schema\":{\"$ref\":\"#/definitions/BiogridSimulationResults\"}}},\"security\":[],\"parameters\":[{\"in\":\"body\",\"name\":\"body\",\"required\":true,\"schema\":{\"$ref\":\"#/definitions/NewBiogridOpts\"}}]}}},\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"securityDefinitions\":{}}");
+module.exports = JSON.parse("{\"basePath\":\"/service\",\"consumes\":[\"application/json\"],\"definitions\":{\"BiogridSimulationResults\":{\"properties\":{\"energyWastedFromSource\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"energyWastedInTransportation\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"timeWithoutEnoughEnergy\":{\"type\":\"number\",\"format\":\"double\",\"x-nullable\":true},\"townSize\":{\"properties\":{\"width\":{\"type\":\"number\",\"format\":\"double\"},\"height\":{\"type\":\"number\",\"format\":\"double\"}},\"required\":[\"height\",\"width\"],\"type\":\"object\"},\"states\":{\"items\":{\"additionalProperties\":true,\"type\":\"object\"},\"type\":\"array\"}},\"required\":[\"townSize\",\"states\"],\"type\":\"object\",\"additionalProperties\":true},\"NewBiogridOpts\":{\"properties\":{\"startDate\":{\"type\":\"string\",\"format\":\"date-time\"},\"smallBatteryCells\":{\"type\":\"number\",\"format\":\"double\"},\"largeBatteryCells\":{\"type\":\"number\",\"format\":\"double\"},\"numBuildings\":{\"type\":\"number\",\"format\":\"double\"},\"numSolarPanels\":{\"type\":\"number\",\"format\":\"double\"},\"townHeight\":{\"type\":\"number\",\"format\":\"double\"},\"townWidth\":{\"type\":\"number\",\"format\":\"double\"}},\"required\":[\"startDate\",\"smallBatteryCells\",\"largeBatteryCells\",\"numBuildings\",\"numSolarPanels\",\"townHeight\",\"townWidth\"],\"type\":\"object\",\"additionalProperties\":true}},\"info\":{\"title\":\"TSOA\",\"version\":\"1.0.0\",\"description\":\"Build swagger-compliant REST APIs using TypeScript and Node\",\"license\":{\"name\":\"MIT\"}},\"paths\":{\"/biogrid/simulate\":{\"post\":{\"operationId\":\"SimulateNewBiogrid\",\"produces\":[\"application/json\"],\"responses\":{\"200\":{\"description\":\"\",\"schema\":{\"$ref\":\"#/definitions/BiogridSimulationResults\"}}},\"security\":[],\"parameters\":[{\"in\":\"body\",\"name\":\"body\",\"required\":true,\"schema\":{\"$ref\":\"#/definitions/NewBiogridOpts\"}}]}}},\"produces\":[\"application/json\"],\"swagger\":\"2.0\",\"securityDefinitions\":{}}");
 
 /***/ })
 /******/ ])));
