@@ -376,7 +376,7 @@ exports.RESISTANCE = {
  */
 exports.BUILDING = {
     DEFAULT_INITIAL_ENERGY: 1.3,
-    MAX_CAPACITY: 32,
+    MAX_CAPACITY: 10,
     MIN_CAPACITY: 0,
     /**
      * Source is from Research Gate
@@ -797,6 +797,7 @@ async function simulateNewBiogrid(body) {
         efficiencies.push(biogrid.getEfficiency());
     }
     const efficienciesAddedUp = efficiencies
+        // Filters for any NaN values
         .filter((efficiency) => efficiency)
         .reduce((prev, curr) => prev + curr, 0);
     return {
@@ -1823,7 +1824,8 @@ class Biogrid {
         return this.state;
     }
     getEfficiency() {
-        return this.efficiency;
+        // Round off the efficiency to 3 dps
+        return parseFloat(this.efficiency.toFixed(3));
     }
     getJsonGraphDetails() {
         return this.state.getJsonGraph();
